@@ -1,0 +1,35 @@
+105. Construct Binary Tree from Preorder and Inorder Traversal
+
+给定一个先序和中序遍历的树，要求重建这棵二叉树。
+
+分析：
+把树分成3部分，
+	A 左子树
+	B 右子树
+	r 当前节点
+先序遍历 r A B
+中序遍历 A r B
+所以先序遍历的第一个元素就是r，可以把中序遍历分成2部分，A，B。然后中序遍历R的前一个就是A的最后一个节点，可以确定A的范围。
+
+第一版超内存了，可能因为进行了太多次的创建vector操作。
+改成用绝对下标的写法，就AC了。
+而且这种写法简洁许多。
+
+代码：
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        return build(preorder, inorder, 0, preorder.size(), 0, inorder.size());
+    }
+    TreeNode *build(vector<int> &pre, vector<int> &in, int ps, int pe, int is, int ie) {
+        if (ps >= pe) return NULL;
+
+        int rootVal = pre[ps];
+        int pos;
+        for (int i = is; i < ie; ++i) if (in[i] == rootVal) {pos = i; break;}
+        TreeNode *node = new TreeNode(rootVal);
+        node->left = build(pre, in, ps+1, ps+pos-is+1, is, pos);
+        node->right = build(pre, in, ps+pos-is+1, pe, pos+1, ie);
+        return node;
+    }
+};

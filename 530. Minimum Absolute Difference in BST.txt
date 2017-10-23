@@ -1,0 +1,65 @@
+530. Minimum Absolute Difference in BST
+
+给定一个二叉搜索树，求任意两个节点之间的最小绝对差值。
+
+分析：
+最差的方法，当然是O(n^2)的。
+能不能利用BST性质降为O(nlogn)呢？
+
+1.
+将BST转化为vector，排序，然后比较相邻位置差值即可。复杂度O(nlogn)
+
+2.
+考虑2组节点
+[父，左子，右孙]
+[父，右子，左孙]
+以第一组为例，可以知道，[父，孙]之间的距离是这一组节点里最小的。
+显然[父，右孙] < [左子，右孙]
+于是有算法，枚举[父，右孙]和[父，左孙]，然后取最小值即可。复杂度O(nlogn)
+
+
+代码：
+
+方法1.
+class Solution {
+private:
+    vector<int> v;
+public:
+    int getMinimumDifference(TreeNode* root) {
+        turn(root);
+
+        sort(v.begin(), v.end());
+        int ans = 0xffffff;
+        for (int i = 0; i < v.size()-1; ++i) {
+            ans = min(ans, v[i+1] - v[i]);
+        }
+        return ans;
+
+    }
+    void turn(TreeNode* node) {
+        if (node == nullptr) return;
+        v.push_back(node->val);
+        turn(node->left);
+        turn(node->right);
+    }
+};
+
+
+方法x.
+class Solution {
+public:
+    int getMinimumDifference(TreeNode* root) {
+        int ans = numeric_limits<int>::max();
+        TreeNode* pre = nullptr;
+        inorder(root, pre, ans);
+        return ans;
+    }
+    void inorder(TreeNode* node, TreeNode*& pre, int& ans) {
+        if (node == nullptr) return;
+        inorder(node->left, pre, ans);
+        if (pre != nullptr)
+            ans = min(ans, node->val - pre->val);
+        pre = node;
+        inorder(node->right, pre, ans);
+    }
+};

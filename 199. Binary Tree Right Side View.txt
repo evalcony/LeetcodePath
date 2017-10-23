@@ -1,0 +1,44 @@
+199. Binary Tree Right Side View
+
+给定一个二叉树，求其从右边看起来的样子。
+
+分析
+难的是右边树比左边短，此时右边的树高已经到头，而左半边的树还有深度，此时从右边看应该在左边。
+
+设定一个dep数组，标记这一层是否入队。先右再左的遍历方法。
+
+
+代码
+
+class Solution {
+private:
+    vector<int> v;
+    int vis[1000];
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        if (root == nullptr) return v;
+        memset(vis, 0, sizeof(vis));
+        v.push_back(root->val);
+        vis[0] = 1;
+        search(root, 1);
+        return v;
+    }
+    void search(TreeNode *node, int dep) {
+        if (node == nullptr) return;
+
+        if (node->right != nullptr) {
+            if (!vis[dep]) {
+                v.push_back(node->right->val);
+                vis[dep] = 1;
+            }
+            search(node->right, dep+1);
+        }
+        if (node->left != nullptr) {
+            if (!vis[dep]) {
+                v.push_back(node->left->val);
+                vis[dep] = 1;
+            }
+            search(node->left, dep+1);
+        }
+    }
+};

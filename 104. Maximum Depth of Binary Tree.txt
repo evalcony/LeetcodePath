@@ -1,0 +1,15 @@
+104. Maximum Depth of Binary Tree
+
+给定一个二叉树，找最大深度。
+
+代码：
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        return dfs(root);
+    }
+    int dfs(TreeNode* node) {
+        if (node == nullptr) return 0;
+        return max(dfs(node->left), dfs(node->right)) + 1;
+    }
+};

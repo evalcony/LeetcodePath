@@ -1,0 +1,90 @@
+592. Fraction Addition and Subtraction
+
+给定一个表达式，计算结果，给出既约分数的表达式。
+
+分析：
+题目比较容易，就是纯考察string转化而已。还有就是一个gcd, lcm。
+
+代码：
+class Solution {
+public:
+    string fractionAddition(string exp) {
+        exp = init(exp);
+        vector<string> vfrac = split(exp);
+        vector<pair<int, int>> vn = split(vfrac);
+
+        string ans = solve(vn);
+        return ans;
+    }
+
+    string init(string exp) {
+        if (exp.size() == 0) return "";
+        string s;
+        s += exp[0];
+        for (int i = 1; i < exp.size(); ++i) {
+            if (exp[i] == '-') s += '+';
+            s += exp[i];
+        }
+        return s;
+    }
+
+    vector<string> split(string exp) {
+        vector<string> v;
+        int pre = 0;
+        for (int i = 1; i < exp.size(); ++i) {
+            if (exp[i] == '+') {
+                v.push_back(exp.substr(pre, i-pre));
+                pre = i+1;
+            }
+        }
+        v.push_back(exp.substr(pre, exp.size()));
+
+        return v;
+    }
+    vector<pair<int, int>> split(vector<string> exp) {
+        vector<pair<int, int>> v;
+        for (int j = 0; j < exp.size(); ++j) {
+            int pre = 0;
+            for (int i = 1; i < exp[j].size(); ++i) {
+                if (exp[j][i] == '/') {
+                    int a = stoi(exp[j].substr(pre, i));
+                    int b = stoi(exp[j].substr(i+1, exp[j].size()-i-1));
+                    v.push_back(make_pair(a, b));
+                }
+            }
+        }
+        return v;
+    }
+
+    pair<int, int> add(pair<int, int> a, pair<int, int> b) {
+        int L = lcm(a.second, b.second);
+        int a1 = a.first * L / a.second;
+        int b1 = b.first * L / b.second;
+        int t = a1+b1;
+        int c = gcd(t, L);
+        if (c == 1)
+            return make_pair(t, L);
+        else
+            return make_pair(t/c, L/c);
+    }
+
+    string solve(vector<pair<int, int>> v) {
+        pair<int, int> pre = v[0];
+        for (int i = 1; i < v.size(); ++i) {
+            pre = add(pre, v[i]);
+        }
+        if (pre.first > 0 && pre.second < 0) {
+            pre.first = -pre.first;
+            pre.second = -pre.second;
+
+        }
+        return to_string(pre.first) + '/' + to_string(pre.second);
+    }
+
+    int gcd(int a, int b) {
+        if(b) return gcd(b, a%b);
+        return a;
+    }
+    int lcm(int a, int b) {return (a / gcd(a, b)) * b;}
+
+};

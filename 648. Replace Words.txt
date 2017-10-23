@@ -1,0 +1,38 @@
+648. Replace Words
+
+字符串替换。在字典中找到最短能替换的单词。
+
+代码：
+class Solution {
+typedef vector<string> vs;
+#define pb(a) push_back(a)
+public:
+    string replaceWords(vector<string>& dict, string sentence) {
+        set<string> m_s;
+        for (auto s : dict)
+            m_s.insert(s);
+        vs v = split(sentence);
+        for (int i = 0; i < v.size(); ++i) {
+            for (int j = 1; j <= v[i].size(); ++j) {
+                if (m_s.count(v[i].substr(0, j))) {
+                    v[i] = v[i].substr(0, j);
+                    break;
+                }
+            }
+        }
+        string ans = v[0];
+        for (int i = 1; i < v.size(); ++i)
+            ans += " " + v[i];
+        return ans;
+    }
+    vs split(string str) {
+        vs v;
+        for (int i = 0; i < str.size();) {
+            int j = i;
+            while (j < str.size() && str[j] != ' ') ++j;
+            v.pb(str.substr(i, j-i));
+            i = j+1;
+        }
+        return v;
+    }
+};

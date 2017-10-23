@@ -1,0 +1,42 @@
+96. Unique Binary Search Trees
+
+一棵BST有n个节点，问有多少种不同的构造。
+
+分析：
+一开始的想法是，
+f[i] = f[i-1]*i-重复
+
+f[1] 1
+f[2] 2
+f[3] 5
+f[4] 
+
+
+后来注意到，一棵树的构造可以表示为
+	f[left]*f[right] left+right+1=n
+其中left,right分别是左右节点的数量。
+而只要枚举左右节点的数量，就能得到节点总数为n的树的构造数。
+
+f[0] 1
+f[1] 1
+f[2] 2
+f[3] 5
+f[4] f[1]*f[2]+f[2]*f[1]+f[0]*f[3]+f[3]*f[1] = 2+2+5+5=14
+
+可以得到递推方程
+f[n] = sum(f[n-1-i]*f[i]) , i from 0 to n-1
+
+代码：
+class Solution {
+public:
+    int numTrees(int n) {
+        vector<int> f(n+1, 0);
+        f[0] = f[1] = 1;
+        f[2] = 2;
+        f[3] = 5;
+        for (int i = 4; i <= n; ++i)
+            for (int j = 0; j < i; ++j)
+                f[i] += f[i-1-j]*f[j];
+        return f[n];
+    }
+};

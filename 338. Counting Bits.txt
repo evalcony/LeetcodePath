@@ -1,0 +1,24 @@
+338. Counting Bits
+
+给定一个非负整数num。对于每一个满足0 ≤ i ≤ num的数字i，计算其数字的二进制表示中1的个数，并以数组形式返回。
+
+分析：
+位运算。
+
+代码：
+class Solution {
+public:
+    vector<int> countBits(int num) {
+        vector<int> v;
+        for (int i = 0; i <= num; ++i) {
+            int t = i;
+            int cnt = 0;
+            while (t) {
+                if (t & 1) ++cnt;
+                t >>= 1;
+            }
+            v.push_back(cnt);
+        }
+        return v;
+    }
+};

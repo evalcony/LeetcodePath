@@ -1,0 +1,146 @@
+117. Populating Next Right Pointers in Each Node II
+给定一棵二叉树，将其改造成如下形式。
+
+         1
+       /  \
+      2    3
+     / \    \
+    4   5    7
+
+         1 -> NULL
+       /  \
+      2 -> 3 -> NULL
+     / \    \
+    4-> 5 -> 7 -> NULL
+
+分析：
+需要为树每一层维护一个数组，存放树的节点。
+vector<vector<TreeLinkNode *>>
+用bffs得到树的每一层
+用pair<int, TreeLinkNode *> 控制每一层的节点，存入队列queue中
+
+代码：
+class Solution {
+public:
+    void connect(TreeLinkNode *root) {
+        if (root == nullptr) return;
+
+        vector<vector<TreeLinkNode *>> v;
+        vector<TreeLinkNode *> vv;
+        pair<int, TreeLinkNode *> p;
+
+        TreeLinkNode *node = root;
+        queue<pair<int, TreeLinkNode *>> q;
+        q.push(make_pair(0, node));
+        int cur = 0;
+
+        while (!q.empty()) {
+            p = q.front(); q.pop();
+            node = p.second;
+            if (node->left != nullptr)
+                q.push(make_pair(p.first+1, node->left));
+            if (node->right != nullptr)
+                q.push(make_pair(p.first+1, node->right));
+            if (p.first == cur)
+                vv.push_back(node);
+            else {
+                cur = p.first;
+                v.push_back(vv);
+                vv.clear();
+                vv.push_back(node);
+            }
+        }
+        if (vv.size())
+            v.push_back(vv);
+
+        for (int i = 0; i < v.size(); ++i) {
+            node = v[i][0];
+            for (int j = 1; j < v[i].size(); ++j) {
+                node->next = v[i][j];
+                node = v[i][j];
+            }
+            node->next = nullptr;
+        }
+    }
+};
+
+//////////////////////////////////////////////////////
+
+即便是同样的思路，但写法更简单的做法
+
+class Solution 
+{
+public:
+    void connect(TreeLinkNode *root) 
+    {
+        if(!root) return;
+        queue<TreeLinkNode*> Q;
+        Q.push(root);
+        while(!Q.empty())
+        {
+            int len = Q.size();
+            for(int i = 0; i < len; i++)
+            {
+                TreeLinkNode *curr = Q.front();
+                Q.pop();
+                if(curr->left)
+                    Q.push(curr->left);
+                if(curr->right)
+                    Q.push(curr->right);
+                if(i != len - 1)
+                    curr->next = Q.front();
+                
+            } 
+        }
+        return;
+    }
+};
+
+该做法精妙在于，用len来控制该层的循环，使得遍历到的节点都为同一层节点。
+	itn len = Q.size();
+	for (int i = 0; i < len; ++i) {
+		....
+	}
+而同一层中，可以方便地得到已经出队的元素和队首的元素，而只要稍微注意一下边界条件即可
+	TreeLinkNode *curr = Q.front();
+	Q.pop();
+	...
+	if (i != len-1)
+		curr->next = Q.front();
+
+这个写法很好。
+
+//////////////////////////////////////////////////////
+
+
+
+写法更简单，且更快的做法
+
+class Solution {
+public:
+    void connect(TreeLinkNode *root) {
+        TreeLinkNode *tempChild = new TreeLinkNode(0);
+        while(root)
+        {
+            TreeLinkNode* currentChild = tempChild;
+            while(root)
+            {
+                if(root->left)
+                {
+                    currentChild->next = root->left;
+                    currentChild = currentChild->next;
+                }
+                if(root->right)
+                {
+                    currentChild->next = root->right;
+                    currentChild = currentChild->next;
+                }
+                root=root->next;
+            }
+            root=tempChild->next;
+            tempChild->next = NULL;
+        }
+    }
+};
+
+本质没变，但是写法巧妙。故在时间上提升并不大。

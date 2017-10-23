@@ -1,0 +1,30 @@
+500. Keyboard Row
+
+给定一个单词数组，返回能用键盘上同一行按键敲出来的单词。
+
+
+代码：
+class Solution {
+public:
+    vector<string> findWords(vector<string>& words) {
+        vector<string> ans;
+        int kb[26] = {1,2,2,1,0,1,1,1,0,1,1,1,2,2,0,0,0,0,1,0,0,2,0,2,0,2};
+
+        for (int k = 0; k < words.size(); ++k) {
+            bool flag = true;
+            string w = words[k];
+            transform(w.begin(),w.end(),w.begin(), ::tolower);
+            int cur = kb[w[0] - 'a'];
+            for (int j = 1; j < w.length(); ++j) {
+                if (kb[w[j]-'a'] != cur) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                ans.push_back(words[k]);
+            }
+        }
+        return ans;
+    }
+};

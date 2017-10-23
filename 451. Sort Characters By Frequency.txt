@@ -1,0 +1,68 @@
+451. Sort Characters By Frequency
+
+将一个字符串按照字母频率重新排列。
+相同频率字母其顺序不作要求。
+要求统计的字符包括字母、数字、空格、.,'"\/
+
+分析：
+struct{
+	char c;
+	int f;
+}
+按照排列。
+先在map中存，然后保存到vector中排序，然后遍历vector。
+
+忘了可以用pair来保存的，还自己搞了一个多余的ITEM来。
+
+代码：
+class Solution {
+private:
+struct ITEM{
+    char c;
+    int f;
+    bool operator <(const ITEM& a)const {
+        return f < a.f;
+    }
+    bool operator >(const ITEM& a)const {
+        return f > a.f;
+    }
+};
+public:
+    string frequencySort(string s) {
+        map<char, int> alpha;
+        for (int i = 0; i < s.size(); ++i)
+            alpha[s[i]]++;
+        vector<ITEM> v;
+        for (auto it = alpha.begin(); it != alpha.end(); ++it) {
+            ITEM a;
+            a.c = it->first;
+            a.f = it->second;
+            v.push_back(a);
+        }
+        sort(v.begin(), v.end(), greater<ITEM>());
+        string ans;
+        for (int i = 0; i < v.size(); ++i)
+            for (int j = 0; j < v[i].f; ++j)
+                ans += v[i].c;
+        return ans;
+    }
+};
+
+-----------------
+
+
+class Solution {
+public:
+	string freqency(string s) {
+		map<char, int> alp;
+		for (char c : s) alp[c]++;
+		vector<pair<char, int>> v;
+		for (auto it=alp.begin(); it != alp.end(); ++it)
+			v.push_back({it->first, it->second});
+		sort(v.begin(), v.end());
+		s = "";
+		for (int i = 0; i < v.size(); ++i)
+			s += string(v[i].first, v[i].second);
+		return s;
+	}
+}

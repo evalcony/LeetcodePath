@@ -1,0 +1,35 @@
+357. Count Numbers with Unique Digits
+
+给定一个整数n，计算10^n以内所有拥有不重复数字的元素个数。
+
+分析：
+常规遍历方法只能处理n<=6的情况。
+
+显然当n超过10，是不可能有符合要求的数的，故只需要考虑n<=10。
+第1位，有9种
+第2位，有9种
+第3位，有8种，
+第k位，有11-k种
+
+故有9*9*...*(11-k)个数，当数字有k位的时候。
+但不要忽略了<k位的数也是符合要求的。另外，当k=1时，有10种选法，因为0也是符合的。
+故
+for (int i = 1; i <= k; ++i)
+	ans += mul(k);
+ans++;
+
+代码：
+class Solution {
+public:
+    int countNumbersWithUniqueDigits(int n) {
+        n = n > 10 ? 10 : n;
+        int ans = 0;
+        for (int k = 1; k <= n; ++k) {
+            int s = 9;
+            for (int j = 9; j >= 11-k; --j) s *= j;
+            ans += s;
+        }
+        ans++;
+        return ans;
+    }
+};

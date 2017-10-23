@@ -1,0 +1,30 @@
+412. Fizz Buzz
+
+按要求输出结果，
+	每逢3的倍数，输出Fizz
+	每逢5的倍数，输出Buzz
+	每逢15的倍数，输出FizzBuzz
+
+代码：
+class Solution {
+public:
+    vector<string> fizzBuzz(int n) {
+        vector<string> v;
+        for (int i = 1; i <= n; ++i) {
+            if (i % 15 == 0) v.push_back("FizzBuzz");
+            else if (i % 3 == 0) v.push_back("Fizz");
+            else if (i % 5 == 0) v.push_back("Buzz");
+            else v.push_back(toString(i));
+        }
+        return v;
+    }
+    string toString(int x) {
+        string s;
+        while (x) {
+            s += '0' + x % 10;
+            x /= 10;
+        }
+        reverse(s.begin(), s.end());
+        return s;
+    }
+};

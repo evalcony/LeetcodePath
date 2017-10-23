@@ -1,0 +1,24 @@
+453. Minimum Moves to Equal Array Elements
+
+给定一个非空数组，求最小的「移动」数，使得所有数相等。
+一次「移动」指把n-1个数+1.
+
+分析：
+用优先级队列存起来，对前n-1个数+1，直到所有数相等。这当然能做出来，但是太慢。不符合这道题easy的定位。
+
+后来看到一个算法，O(n)，非常简洁。
+找到最小的数m，然后求所有a[i]-m的和。
+
+
+代码：
+class Solution {
+public:
+    int minMoves(vector<int>& nums) {
+        if (nums.size() <= 1) return 0;
+        int m = nums[0];
+        for (int i = 1; i < nums.size(); ++i) m = min(m, nums[i]);
+        int ans = 0;
+        for (int i = 0;  i < nums.size(); ++i) ans += nums[i]-m;
+        return ans;
+    }
+};

@@ -1,0 +1,75 @@
+148. Sort List
+
+使用常数空间以O(nlogn)的时间复杂度，把一个链表排序。
+
+分析：
+好多人用的也都是mergesort的思路。
+
+代码：
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        if (head) help(head);
+        return head;
+    }
+
+    void help(ListNode *head) {
+        ListNode *node = head;
+        vector<int> v;
+        while (node) {v.push_back(node->val); node = node->next;}
+        sort(v.begin(), v.end());
+        node = head;
+        int i = 0;
+        while (node) {
+            node->val = v[i++];
+            node = node->next;
+        }
+    }
+};
+
+
+//////////////////////////
+
+mergesort版
+
+class Solution {
+public:
+    ListNode* merge(ListNode* l1,ListNode*l2){
+        ListNode* result=NULL;
+        if(l1==NULL)
+            return l2;
+        if(l2==NULL)
+            return l1;
+        if(l1->val<l2->val)
+        {
+            result=l1;
+            result->next=merge(l1->next,l2);
+        }
+        else
+        {
+            result=l2;
+            result->next=merge(l1,l2->next);
+        }
+        return result;
+    }
+    ListNode* sortList(ListNode* head) {
+        if(!head || !head->next)
+            return head;
+        ListNode* slow,*fast;
+        slow=head;
+        fast=head->next;
+        while(fast && fast->next)
+        {
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        ListNode* left,*right;
+        left=head;
+        right=slow->next;
+        slow->next=NULL;
+        left=sortList(left);
+        right=sortList(right);
+        head=merge(left,right);
+        return head;
+    }
+};

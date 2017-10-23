@@ -1,0 +1,14 @@
+383. Ransom Note
+
+代码：
+class Solution {
+public:
+    bool canConstruct(string ran, string mag) {
+        map<char, int> m;
+		for (int i = 0; i < mag.size(); ++i) m[mag[i]]++;
+		for (int i = 0; i < ran.size(); ++i)
+			if (--m[ran[i]] < 0)
+				return false;
+		return true;
+    }
+};

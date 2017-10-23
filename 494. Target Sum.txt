@@ -1,0 +1,54 @@
+494. Target Sum
+
+https://leetcode.com/submissions/detail/109726987/
+
+给定一个数组，和一个目标数，要求添加+或者-，使得运算结果=目标数。求总的方案数。
+
+分析
+dfs
+
+代码：
+class Solution {
+private:
+    int deep, target, ans = 0;
+    vector<int> v;
+public:
+    int findTargetSumWays(vector<int>& nums, int S) {
+        deep = nums.size();
+        target = S;
+        v = nums;
+        dfs(0, 0);
+        return ans;
+    }
+    void dfs(int cur, int dep) {
+        if (dep == deep) {
+            if (cur == target) ++ans;
+            return;
+        }
+        dfs(cur+v[dep], dep+1);
+        dfs(cur-v[dep], dep+1);
+    }
+};
+
+-------------------
+效率更高的做法
+
+但是看不懂
+
+class Solution {
+public:  
+    int cal(vector<int>& nums, int S) {
+        vector<int> dp(S+1, 0);
+        dp[0] = 1;
+        for(int num:nums)
+            for(int i=S; i>=num; --i)
+                dp[i] += dp[i-num];
+        return dp[S];
+    }
+    
+    int findTargetSumWays(vector<int>& nums, int S) {
+        int sum = 0;
+        for(int num:nums)sum += num;
+        return sum<S || (sum+S)&1 ? 0 : cal(nums, (sum+S)>>1);
+    }
+};

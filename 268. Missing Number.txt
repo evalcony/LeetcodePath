@@ -1,0 +1,20 @@
+268. Missing Number
+
+给定一个n位长的数组，包含从0到n的这n+1个数中的n个数。求缺失的那个数。
+要求空间复杂度是O(1)，时间复杂度是O(n)
+
+
+分析：
+利用求和公式 n*(n+1)/2 - sum(a[i])
+
+代码：
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        int n = nums.size();
+        int sum = n * (n+1)/2;
+        for (int i = 0; i < n; ++i)
+            sum -= nums[i];
+        return sum;
+    }
+};

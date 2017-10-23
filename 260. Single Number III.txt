@@ -1,0 +1,22 @@
+ 260. Single Number III
+
+给定一个数组，其中2个元素出现1次，其他元素出现2次。找到那2个只出现1次的数。要求时间复杂度O(n)，空间复杂度O(1)。
+
+分析：
+代码没怎么看懂。
+尤其是那个dif &= -dif这一步。
+
+代码：
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        int dif = accumulate(nums.begin(), nums.end(), 0, bit_xor<int>());
+        dif &= -dif;
+        vector<int> v = {0, 0};
+        for (int num : nums) {
+            if ((num & dif) == 0) v[0] ^= num;
+            else v[1] ^= num;
+        }
+        return v;
+    }
+};

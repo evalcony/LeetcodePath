@@ -1,0 +1,22 @@
+515. Find Largest Value in Each Tree Row
+
+找到二叉树里面，每一层深度的最大元素
+
+代码：
+class Solution {
+private:
+    vector<int> ans;
+public:
+    vector<int> largestValues(TreeNode* root) {
+        search(root, 0);
+        return ans;
+    }
+    void search(TreeNode* node, int depth) {
+        if (node == NULL) return;
+        
+        if (depth == ans.size()) ans.push_back(node->val);
+        else ans[depth] = max(ans[depth], node->val);
+        search(node->left, depth+1);
+        search(node->right, depth+1);
+    }
+};

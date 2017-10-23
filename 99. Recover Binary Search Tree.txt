@@ -1,0 +1,29 @@
+99. Recover Binary Search Tree
+
+一棵BST中有2个元素的位置错了。要求修复这棵BST。
+要求空间复杂度为O(1)。
+
+分析：
+一道hard题目。
+没看懂代码什么意思。主要是first和seocnd什么意思不知道。
+
+代码：
+class Solution {
+    TreeNode* first=NULL;
+    TreeNode* second=NULL;
+    TreeNode* prev = new TreeNode(INT_MIN);
+public:
+    void recoverTree(TreeNode* root) {
+        help(root);
+        swap(first->val, second->val);
+    }
+    
+    void help(TreeNode* root){
+        if(root==NULL)  return;
+        help(root->left);
+        if(first==NULL && prev->val >= root->val) first=prev;
+        if(first!=NULL && prev->val >= root->val) second=root;
+        prev=root;
+        help(root->right);
+    }
+};

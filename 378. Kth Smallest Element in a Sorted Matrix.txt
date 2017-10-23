@@ -1,0 +1,83 @@
+378. Kth Smallest Element in a Sorted Matrix
+
+给定一个n阶矩阵，每一行每一列都是升序，求其中第k小的数。
+
+分析：
+解法1.用小根堆的优先级队列来存储。然后抛出前k-1个即可。复杂度O(n^2lgk).
+
+http://www.cnblogs.com/grandyang/p/5727892.html
+
+解法2.二分搜索。
+对每一行进行二分。复杂度是O(nlgnlgk).
+
+解法3.对解法2的优化
+可以优化到O(nlgk)
+
+
+代码：
+
+解法1.
+class Solution {
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+    	priority_queue<int> pq;
+    	for (int i = 0; i < matrix.size(); ++i)
+    		for (int j = 0; j < matrix[0].size(); ++j)
+    			pq.push(matrix[i][j]);
+    	for (int i = 0; i < k-1; ++i)
+    		pq.pop();
+    	return pq.top();
+    }
+};
+
+
+解法2.
+class Solution {
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int left = matrix[0][0], right = matrix.back().back();
+        while (left < right) {
+            int mid = left + (right - left) / 2, cnt = 0;
+            cout << cnt << " ";
+            for (int i = 0; i < matrix.size(); ++i) {
+                cnt += upper_bound(matrix[i].begin(), matrix[i].end(), mid) - matrix[i].begin();
+            }
+            if (cnt < k) left = mid + 1;
+            else right = mid;
+        }
+        return left;
+    }
+};
+
+解法3.
+
+class Solution {
+private:
+	vvi v;
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+    	v = matrix;
+    	int n = matrix.size();
+    	int st = matrix[0][0], ed = matrix[n-1][n-1];
+    	while (st < ed) {
+    		int mid = st + (ed - st) / 2;
+    		int cnt = search_less(mid);
+    		if (cnt < k) st = mid+1;
+    		else ed = mid;
+    	}
+    	return st;
+    }
+    int search_less(int target) {
+    	int n = v.size(), i = n-1, j = 0, res = 0;
+    	while (i >= 0 && j < n) {
+    		if (v[i][j] <= target) {
+    			res += i+1;
+    			++j;
+    		} else {
+    			--i;
+    		}
+    	}
+    	return res;
+    }
+
+};

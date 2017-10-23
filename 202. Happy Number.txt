@@ -1,0 +1,65 @@
+202. Happy Number
+
+一个数是happy number，如果取它的各位数字不断做平方和，直到结果为1。
+例如，19是happy number，因为
+	1^2 + 9^2 = 82
+	8^2 + 2^2 = 68
+	6^2 + 8^2 = 100
+	1^2 + 0^2 + 0^2 = 1
+
+分析：
+打表出所有1位数的是否是happy number，然后直接判断即可。
+
+代码：
+
+class Solution {
+public:
+    bool isHappy(int n) {
+        int f[10] = {0,1,0,0,0,0,0,1,0,0};
+
+        while (n) {
+            if (len(n) == 1) return f[n];
+
+            vector<int> v = getEach(n);
+            int sum = 0;
+            for (int i = 0; i < v.size(); ++i) {
+                sum += v[i]*v[i];
+            }
+            n = sum;
+        }
+        return false;
+
+    }
+    vector<int> getEach(int n) {
+        vector<int> v;
+        while (n) {
+            v.push_back(n % 10);
+            n /= 10;
+        }
+        return v;
+    }
+    int len(int n) {
+        int k = 0;
+        do {
+            n /= 10;
+            ++k;
+        } while (n);
+        return k;
+    }
+};
+
+///////////////////////
+
+更短的代码
+
+class Solution {
+public:
+    bool isHappy(int n) {
+        while(n>6){
+        int next = 0;
+        while(n){next+=(n%10)*(n%10); n/=10;}
+        n = next;
+        }
+        return n==1;
+    }
+};

@@ -1,0 +1,28 @@
+215. Kth Largest Element in an Array
+
+
+题意：
+给定一个无序数组，找到第k大的数。
+
+代码：
+
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        vector<int> x = nums;
+        sort(x.rbegin(), x.rend());
+        return x[k-1];
+    }
+};
+
+
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        priority_queue<int> q(nums.begin(), nums.end());
+        for (int i = 0; i < k - 1; i++) {
+            q.pop();
+        }
+        return q.top();
+    }    
+};

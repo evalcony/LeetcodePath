@@ -1,0 +1,25 @@
+462. Minimum Moves to Equal Array Elements II
+
+对一个非空整数数组，求最少的操作数，使得所有数相等。把一个数+1或者-1称为1次操作。
+
+分析：
+求算数平均A，然后sum(abs(A-A[i]))
+但是这个算法是错的。可是不知道哪里错。
+
+反而下面AC的这段代码，我觉得是错的。
+
+
+代码：
+class Solution {
+public:
+    int minMoves2(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int i = 0, j = nums.size()-1;
+        int ans = 0;
+        while (i < j) {
+            ans += nums[j]-nums[i];
+            --j; ++i;
+        }
+        return ans;
+    }
+};

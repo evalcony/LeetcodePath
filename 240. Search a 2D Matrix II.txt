@@ -1,0 +1,27 @@
+240. Search a 2D Matrix II
+
+给定一个有序二维矩阵，判断给定元素是否存在。
+
+代码：
+外层顺序遍历，内层二分搜索。
+击败了32%的代码
+
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& t, int target) {
+        int m = t.size(); if (m == 0) return false;
+        int n = t[0].size();
+        if (n == 0) return false;
+        for (int i = 0; i < m; ++i) {
+            if (t[i][0] > target) return false;
+            if (t[i][n-1] < target) continue;
+            int st = 0, ed = n;
+            while (st < ed) {
+                int mid = st + (ed-st)/2;
+                if (t[i][mid] == target) return true;
+                t[i][mid] < target ? st = mid+1 : ed = mid;
+            }
+        }
+        return false;
+    }
+};

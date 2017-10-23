@@ -1,0 +1,133 @@
+51. N-Queens
+
+N皇后问题。
+求所有的合法N皇后局面，Q表示皇后，.表示空位。
+
+定义数组v[i]表示第i个（列）皇后落在第v[i]行。
+于是判断皇后是否落在一条线上有公式
+	i/v[i] != j/v[j] && v[i] != v[j]
+	即j * v[i] != i * v[j] && v[i] = v[j]
+为了避免分母为0的情况，i,j都从1开始
+
+
+AC后的回顾
+1.vis数组是多余想法。一开始是想记录哪些点访问过，但是忘记了每个节点是在自己的列做操作，跟前面的节点没关系。
+2.判断局面合法的判断条件没写对。事实上，
+    abs(dep-i) == abs(q[dep]-dep[i]) || q[dep] == q[i]
+    便可以了。一开始写的时候，没有考虑到右斜上的情况，而且代码也不会写。
+3.冗余代码很多，比如把第一个节点的代码单独写了一遍，而没有在dfs中做处理。
+
+
+
+代码：
+// 尝试到一半没写下去的代码
+class Solution {
+private:
+	vi v, vis;
+	int num, ans = 0;
+public:
+    int totalNQueens(int n) {
+    	num = n;
+    	for (int i = 0; i <= n; ++i) {
+    		v[i] = 0;
+    		vis[i] = 0;
+    	}
+
+        for (int i = 1; i <= n; ++i) {
+        	for (int j = 1; j <= n; ++j) {
+        		if (!vis[j]) {
+        			vis[j] = 1;
+        			v[i] = j;
+        			dfs(1);
+        			v[i] = 0;
+        			vis[j] = 0;
+        		}
+        	}
+        }
+    }
+
+    void dfs(int dep) {
+    	if (dep == n+1) {
+    		++ans;
+    		return;
+    	}
+
+    	for (int i = 1; i <= n; ++i) {
+    		for (int j = 1; j <= n; ++j) {
+    			if (!vis[j]) {
+    				
+    			}
+    		}
+    	}
+
+    }
+
+
+};
+
+-------------------
+
+AC代码
+
+class Solution {
+private:
+    vector<vector<string>> ans;
+    vector<int> q;
+    vector<string> v;
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        string s;
+        for (int i = 0; i < n; ++i) s += '.';
+        for (int i = 0; i < n; ++i) v.push_back(s), q.push_back(-1);
+
+        dfs(0, n);
+
+        return ans;
+    }
+
+    void dfs(int dep, int n) {
+        if (dep == n) {
+            ans.push_back(v);
+            return;
+        }
+
+        for (int j = 0; j < n; ++j) {
+            q[dep] = j;
+            bool flag = false;
+            for (int i = 0; i < dep; ++i) {
+                if (abs(i-dep) == abs(q[i]-q[dep]) || q[i] == q[dep]) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                v[dep][q[dep]] = 'Q';
+                dfs(dep+1, n);
+                v[dep][q[dep]] = '.';
+            }
+        }
+    }
+
+};
+
+
+-------------------------
+
+int ans = 0;
+int v[15];
+
+void dfs(int dep, int n) {
+    if (dep == n) { ans++; return; }
+    for (int i = 0; i < n; ++i) {
+        v[dep] = i; bool has = false;
+        for (int j = 0; j < dep; ++j) 
+            if (abs(j-dep) == abs(v[j]-v[dep]) || v[j] == v[dep]) {has = true; break;}
+
+        if (!has) dfs(dep+1, n);
+    }
+}
+
+int nQueue(int n) {
+    dfs(0, n);
+    return ans;
+}

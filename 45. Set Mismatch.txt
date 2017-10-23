@@ -1,0 +1,21 @@
+45. Set Mismatch
+
+一个数组包含了1-n的n个数，但是其中有一个数重复了，替换了另一个数字。
+要求找出这个重复的数字，以及那个被替换的数字。
+数字范围[2,10000]。
+数组是乱序的。
+
+代码：
+class Solution {
+public:
+    vector<int> findErrorNums(vector<int>& nums) {
+        vector<int> v(nums.size()+1, 0);
+        vector<int> ans;
+        for (int i = 0; i < nums.size(); ++i)
+            if (!v[nums[i]]) v[nums[i]] = nums[i];
+            else ans.push_back(nums[i]);
+        for (int i = 1; i < v.size(); ++i)
+            if (!v[i]) ans.push_back(i);
+        return ans;
+    }
+};

@@ -1,0 +1,31 @@
+106. Construct Binary Tree from Inorder and Postorder Traversal
+
+给定二叉树的中序遍历和后序遍历，要求复原二叉树。
+
+分析：
+跟105类似。
+中序 ArB
+后序 ABr
+
+还是要注意边界条件。
+
+代码：
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        return create(inorder, postorder, 0, inorder.size(), 0, postorder.size());
+    }
+
+    TreeNode *create(vector<int> &in, vector<int> &post, int is, int ie, int ps, int pe) {
+        if (ps>=pe) return NULL;
+
+        int val = post[pe-1];
+        int pos;
+        for (int i = is; i < ie; ++i) if (in[i] == val) {pos = i; break;}
+        TreeNode *node = new TreeNode(val);
+
+        node->left = create(in, post, is, pos, ps, pos-is+ps);
+        node->right = create(in, post, pos+1, ie, pos-is+ps, pe-1);
+        return node;
+    }
+};

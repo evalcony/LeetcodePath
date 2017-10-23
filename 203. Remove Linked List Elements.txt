@@ -1,0 +1,23 @@
+203. Remove Linked List Elements
+
+移除链表中的指定元素。
+
+代码：
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        ListNode *node = new ListNode(INT_MAX);
+        ListNode *pre = node;
+        node->next = head;
+        while (head) {
+            if (head->val == val) {
+                pre->next = head->next;
+                head = pre->next;
+            } else {
+                pre = head;
+                head = head->next;
+            }
+        }
+        return node->next;
+    }
+};

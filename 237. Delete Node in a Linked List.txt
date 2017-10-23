@@ -1,0 +1,13 @@
+237. Delete Node in a Linked List
+
+删除链表里的节点。
+
+代码：
+class Solution {
+public:
+    void deleteNode(ListNode* node) {
+        auto next = node->next;
+        *node = *next;
+        delete next;
+    }
+};

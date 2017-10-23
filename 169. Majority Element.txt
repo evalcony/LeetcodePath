@@ -1,0 +1,39 @@
+169. Majority Element
+
+给定一个长度为n的数组，找到其中出现次数>[n/2]的元素。
+
+代码：
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+
+        map<int, int> mp;
+        for (int i : nums)
+            mp[i]++;
+        int n = nums.size();
+        for (auto it = mp.begin(); it != mp.end(); ++it)
+            if (it->second > n/2) return it->first;
+        return -1;
+    }
+};
+
+方法2：
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int major = nums[0];
+        int count = 1;
+        for (int i = 1; i < nums.size(); i++) {
+            if (nums[i] == major) {
+                count++;
+            } else {
+                count--;
+            }
+            if (count < 0) {
+                major = nums[i];
+                count = 1;
+            }
+        }
+        return major;
+    }
+};

@@ -1,0 +1,22 @@
+551. Student Attendance Record I
+
+用A,L,P表示人的到场情况，A缺席，L迟到，P到场
+如果一个学生要能评奖，他需要有不超过1个A或不超过2个连续的L的到场记录。
+现在给定一个字符串，判断他能否获奖。
+
+分析：
+水题。
+
+代码：
+class Solution {
+public:
+    bool checkRecord(string s) {
+        int A = 0;
+        for (int i = 0; i < s.size(); ++i) {
+            if (s[i] == 'A') ++A;
+            else if (i >=2 && s[i] == 'L' && s[i-1] == 'L' && s[i-2] == 'L') return false;
+            if (A > 1) return false;
+        }
+        return true;
+    }
+};

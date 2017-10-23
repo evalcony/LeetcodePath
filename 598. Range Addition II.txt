@@ -1,0 +1,30 @@
+598. Range Addition II
+
+有一个m*n的二维矩阵，初始化为0.给定一个二维operation数组arr，表示对arr[0][0]到arr[x][y]范围的矩阵进行+1操作。
+求操作完后，矩阵内最大元素的个数。
+
+分析：
+直接模拟的话，会超内存。
+故只能靠纯数字分析。
+
+要使最大，显然是求所有oper的最大交集。最终的结果会落在[0,0]-[x,y]这么一个范围内，其中[x,y]是所有oper的最大交集。
+也即求所有oper的最小x和y。
+
+
+代码：
+class Solution {
+public:
+    int maxCount(int m, int n, vector<vector<int>>& ops) {
+        if (ops.size() <= 0) return m * n;
+        int minx, miny;
+        minx = ops[0][0];
+        miny = ops[0][1];
+        for (int i = 1; i < ops.size(); ++i) {
+            minx = min(minx, ops[i][0]);
+            miny = min(miny, ops[i][1]);
+        }
+        minx = min(minx, m);
+        miny = min(miny, n);
+        return minx * miny;
+    }
+};

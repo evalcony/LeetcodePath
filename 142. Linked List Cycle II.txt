@@ -1,0 +1,27 @@
+142. Linked List Cycle II
+
+给定一个链表，返回其中环的起始节点，若没有则返回NULL。
+要求不使用额外空间。
+
+代码：
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        ListNode *slow = head;
+        ListNode *fast = head;
+        while (fast != nullptr && fast->next != nullptr) {
+            fast = fast->next->next;
+            slow = slow->next;
+
+            if (fast == slow) {
+                ListNode *slow2 = head;
+                while (slow2 != slow) {
+                    slow = slow->next;
+                    slow2 = slow2->next;
+                }
+                return slow;
+            }
+        }
+        return nullptr;
+    }
+};

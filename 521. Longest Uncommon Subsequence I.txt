@@ -1,0 +1,27 @@
+521. Longest Uncommon Subsequence I
+
+给定两个字符串，求最大不相同子串的长度。
+
+
+分析：
+好像除了按位比较这种O(n^2)算法之外，没什么思路。
+
+看了discuss，我又看错题目了？
+
+
+代码：
+
+class Solution {
+public:
+    int findLUSlength(string a, string b) {
+        return equal(a, b) ? -1 : max(a.length(), b.length());
+    }
+
+    bool equal(string a, string b) {
+        if (a.length() != b.length()) return false;
+        for (int i = 0; i < a.length(); ++i)
+            if (a[i] != b[i]) return false;
+        return true;
+    }
+
+};

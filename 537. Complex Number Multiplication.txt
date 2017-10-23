@@ -1,0 +1,89 @@
+﻿537. Complex Number Multiplication
+
+复数乘法运算。
+
+(a+bi)*(c+di) = ac-bd+(ad+bc)i
+
+代码：
+
+typedef vector<int> vi;
+typedef vector<string> vs;
+// (a+bi)*(c+di) = ac-bd+(ad+bc)i
+class Solution {
+public:
+    string complexNumberMultiply(string v1, string v2) {
+        int a, b, c, d;
+        vs s1, s2;
+        s1 = split(v1, '+');
+        s2 = split(v2, '+');
+        string tb, td;
+        tb = s1[1].substr(0, s1[1].length()-1);
+        td = s2[1].substr(0, s2[1].length()-1);
+
+        a = makeInt(s1[0]);
+        c = makeInt(s2[0]);
+        b = makeInt(tb);
+        d = makeInt(td);
+
+        string ans = toString(a*c-b*d) + '+' +  toString(a*d+b*c) + 'i';
+        return ans;
+    }
+    int makeInt(string str) {
+        int ans = 0;
+        int st = 0;
+        if (str[0] == '-') st = 1;
+        for (int i = st; i < str.length(); ++i) {
+            ans *= 10;
+            ans += str[i] - '0';
+        }
+        if (str[0] == '-') return -ans;
+        return ans;
+    }
+    vs split(string str, char reg) {
+        int i = 0;
+        for (; str[i] != reg; ++i);
+        vs ans;
+        ans.push_back(str.substr(0, i));
+        ans.push_back(str.substr(i+1, str.length()));
+        return ans;
+    }
+    string toString(int x) {
+        string ans = "";
+        bool flag = false;
+        if (x < 0) {
+            flag = true;
+            x = -x;
+        }
+        do {
+            ans += toCharNum(x%10);
+            x /= 10;
+        } while (x);
+
+        if (flag) ans += '-';
+        return reverse(ans);
+    }
+    string reverse(string s) {
+        string ans;
+        for (int i = s.length()-1; i >= 0; --i) ans += s[i];
+        return ans;
+    }
+    char toCharNum(int x) {
+        string ch = "0123456789";
+        return ch[x];
+    }
+};
+
+更简单的利用stringstream
+
+class Solution {
+public:
+    string complexNumberMultiply(string a, string b) {
+        int ra, ia, rb, ib;
+        char buff;
+        stringstream aa(a), bb(b), ans;
+        aa >> ra >> buff >> ia >> buff;
+        bb >> rb >> buff >> ib >> buff;
+        ans << ra*rb - ia*ib << "+" << ra*ib + rb*ia << "i";
+        return ans.str();
+    }
+};

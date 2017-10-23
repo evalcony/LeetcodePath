@@ -1,0 +1,72 @@
+65. Valid Number
+
+题意：
+判断一个表达式是否是有效的数字表达式。支持科学计数法。
+
+
+小结：
+通过率很低，WA了挺多次。要考虑的东西比较多。
+有点坑爹。
+像.1 1. -.3e+123 这种表达式也是true。
+
+代码：
+class Solution {
+public:
+    bool isNumber(string s) {
+        s = prehandle(s);
+        return isScienceNum(s);
+    }
+private:
+    string prehandle(string s) {
+        int i = 0, j = s.size();
+        while (s[i] == ' ') ++i;
+        while (s[j-1] == ' ') --j;
+        while (s[i] == '+' || s[i] == '-') ++i;
+        return s.substr(i, j-i);
+    }
+    bool isScienceNum(string s) {
+        int i = 0, j = s.size();
+        int pos = ePos(s.substr(i, j - i));
+        if (pos != -1)
+            return isNum(s.substr(i, pos - i)) && isInteger(s.substr(i + pos + 1, j - i - pos - 1));
+        return isNum(s.substr(i, j - i));
+    }
+    bool isNum(string s) {
+        if (s.size() == 0) return false;
+        int i = 0, j = s.size();
+        int pre = i, end = j;
+        int p = potPos(s.substr(pre, end - pre));
+        if (p != -1) {
+            return isInteger("0" + s.substr(pre, p)) && isUnsignInteger(s.substr(p + 1, end - p - 1))
+            || isInteger(s.substr(pre, p)) && isUnsignInteger("0" + s.substr(p + 1, end - p - 1));
+        }
+        return isInteger(s.substr(pre, end - pre));
+    }
+    // return pot position
+    int potPos(string s) {
+        for (int i = 0; i < s.size(); ++i)
+            if (s[i] == '.')
+                return i;
+        return -1;
+    } 
+    // return e position
+    int ePos(string s) {
+        for (int i = 0; i < s.size(); ++i)
+            if (s[i] == 'e') return i;
+        return -1;
+    }
+    bool isInteger(string s) {
+        if (s.size() == 0) return false;
+        int i = 0;
+        while (s[i] == '-' || s[i] == '+') i++;
+        return isUnsignInteger(s.substr(i, s.size() - i));
+    }
+    bool isUnsignInteger(string s) {
+        if (s.size() == 0) return false;
+        for (int i = 0; i < s.size(); ++i) {
+            if ('0' <= s[i] && s[i] <= '9') continue;
+            else return false;
+        }
+        return true;
+    }
+};

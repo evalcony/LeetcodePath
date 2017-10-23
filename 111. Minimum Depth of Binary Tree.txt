@@ -1,0 +1,20 @@
+111. Minimum Depth of Binary Tree
+
+给定一棵二叉树，返回其最小的深度。
+
+分析：
+
+代码：
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        return dfs(root);
+    }
+    int dfs(TreeNode *node) {
+        if (node == nullptr) return 0;
+        if (!node->left && !node->right) return 1;
+        if (node->left && node->right == nullptr) return dfs(node->left)+1;
+        else if (node->left == nullptr && node->right) return dfs(node->right)+1;
+        return min(dfs(node->left), dfs(node->right))+1;
+    }
+};

@@ -1,0 +1,48 @@
+53. Maximum Subarray
+
+求数组中的最大连续子数组和。
+
+代码：
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        if (nums.size() == 0) return 0;
+        int sum = 0, ans = INT_MIN;
+        int st = 0;
+        while (st < nums.size() && nums[st] <= 0) ++st;
+        if (st == nums.size()) {
+            for (int i = 0; i < nums.size(); ++i)
+                ans = max(ans, nums[i]);
+            return ans;
+        }
+        for (int i = st; i < nums.size(); ++i) {
+            if (sum + nums[i] <= 0) {
+                ans = max(sum, ans);
+                sum = 0;
+            } else {
+                if (nums[i] < 0 && sum != 0) ans = max(sum, ans);
+                sum += nums[i];
+            }
+        }
+        ans = max(ans, sum);
+        return ans;
+    }
+};
+
+
+////////////
+
+更快更短的代码
+
+class Solution {
+public:
+    int maxSubArray(vector<int> &nums) {
+        if (nums.size() == 0) return 0;
+        int ans = nums[0], sub = 0;
+        for (int i = 0; i < nums.size(); ++i) {
+            sub = sub > 0 ? sub+nums[i] : nums[i];
+            if (sub > ans) ans = sub;
+        }
+        return ans;
+    }
+};

@@ -1,0 +1,88 @@
+109. Convert Sorted List to Binary Search Tree
+
+将一个升序的链表转化成平衡BST。
+
+分析：
+先把链表存入数组，然后用二分的办法建树。
+
+代码：
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+private:
+    vector<int> v;
+public:
+    void init(ListNode *node) {
+        while (node) {
+            v.push_back(node->val);
+            node = node->next;
+        }
+    }
+    TreeNode *build(int st, int ed) {
+        if (st < ed) {
+            int mid = st+(ed-st)/2;
+            TreeNode *node = new TreeNode(v[mid]);
+
+            node->left = build(st, mid);
+            node->right = build(mid+1, ed);
+            return node;
+        }
+        return NULL;
+    }
+
+    TreeNode* sortedListToBST(ListNode* head) {
+        if (!head) return NULL;
+        init(head);
+
+        TreeNode *root = build(0, v.size());
+
+        return root;
+    }
+};
+
+更快的方法，用的不是把链表存入数组，而是用快慢指针的办法找到链表中点。
+class Solution {
+public:
+    TreeNode* sortedListToBST(ListNode* head) {
+        if(head == NULL) {
+            return NULL;
+        }
+        
+        if(head->next == NULL) {
+            return new TreeNode(head->val);
+        }
+        
+        ListNode  *slow = head, *fast = head, *last = slow;
+        while(fast->next && fast->next->next) {
+            last = slow;
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        
+        fast = slow->next;
+        last->next = NULL;//断开链表
+        TreeNode *root = new TreeNode(slow->val);
+        if(head != slow) {
+            root->left = sortedListToBST(head);
+        }
+        
+        root->right = sortedListToBST(fast);
+        return root;
+            
+    }  
+};

@@ -1,0 +1,29 @@
+646. Maximum Length of Pair Chain
+
+给定n个有序对，当b<c时，(a,b)和(c,d)能形成一条链，长度为2.
+问这n个有序对最长能形成多长的链条。
+
+
+代码：
+
+坑的是本地是c++竟然不能对二维vector排序。虽然代码是对的。
+
+class Solution {
+public:
+    int findLongestChain(vector<vector<int>>& pairs) {
+        sort(pairs.begin(), pairs.end(), cmp);
+        int cnt = 0;
+        for (int i = 0, j = 0; j < pairs.size(); j++) {
+            if (j == 0 || pairs[i][1] < pairs[j][0]) {
+                cnt++;
+                i = j;
+            }
+        }
+        return cnt;
+    }
+
+private:
+    static bool cmp(vector<int>& a, vector<int>&b) {
+        return a[1] < b[1];
+    }
+};

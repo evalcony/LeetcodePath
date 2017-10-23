@@ -1,0 +1,14 @@
+258. Add Digits
+
+给定一个整数，求各位数的和，直到结果只有1位数。要求不用任何循环和递归，且时间复杂度为O(1)。
+
+分析：
+有现成的公式。
+
+代码：
+class Solution {
+public:
+    int addDigits(int num) {
+        return 1 + (num - 1) % 9;
+    }
+};

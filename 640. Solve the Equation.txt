@@ -1,0 +1,64 @@
+640. Solve the Equation
+
+解方程。
+一道字符串处理题。
+
+代码：
+class Solution {
+public:
+    string solveEquation(string equation) {
+        int i = 0;
+        for (; i < equation.size(); ++i)
+            if (equation[i] == '=')
+                break;
+        vector<int> vleft = count(equation.substr(0, i));
+        vector<int> vright = count(equation.substr(i+1, -1));
+        vleft[0] -= vright[0];
+        vright[1] -= vleft[1];
+        string ans;
+        if (vright[1] == 0 && vleft[0] == 0) ans = "Infinite solutions";
+        else if (vright[1] == 0 && vleft[0] != 0) ans = "No solution";
+        else ans = "x="+to_string(vleft[0]/vright[1]);
+        return ans;
+    }
+    vector<int> count(string str) {
+        vector<int> v(2, 0);
+        if (str[0] != '-') str = "+"+str;
+        for (int i = 0; i < str.size(); ++i) {
+            if (str[i] == '+' || str[i] == '-') {
+                int t = 1;
+                if (str[i] == '+') t = 1;
+                else t = -1;
+                ++i;
+                string sub;
+                while (i < str.size() && str[i] != '+' && str[i] != '-') {
+                    sub += str[i];
+                    ++i;
+                }
+                bool flag = false;
+                if (sub[sub.size()-1] == 'x') flag = true;
+                int x;
+                if (flag) {
+                    string pre = sub.substr(0, sub.size()-1);
+                    if (pre.size())
+                        x = stoi(pre);
+                    else x = 1;
+                    v[1] += t==1?x:-x;
+                } else {
+                    x = stoi(sub);
+                    v[0] += t==1?x:-x;
+                }
+                --i;
+            }
+        }
+        return v;
+    }
+    int stoi(string s) {
+        int x = 0;
+        for (int i = 0; i < s.size(); ++i) {
+            x *= 10;
+            x += s[i]-'0';
+        }
+        return x;
+    }
+};

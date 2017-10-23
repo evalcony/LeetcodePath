@@ -1,0 +1,39 @@
+419. Battleships in a Board
+
+给定一个2维板，计算其中包含多少艘不同的战舰。战舰用字符'X'表示，空白槽位用'.'表示。你应该假设如下规则：
+	给定的board只包含x和.。
+	战舰只能水平或者竖直放置。
+	战舰的尺寸可能不同。
+	两艘战舰之间在水平方向或者竖直方向至少包含一个空间—不会存在相邻的战舰。
+你的算法不应该修改board的值。
+
+分析：
+
+由于board中的战舰之间确保有'.'隔开，因此遍历board，若某单元格为'X'，只需判断其左边和上边的相邻单元格是否也是'X'。
+
+如果左邻居或者上邻居单元格是'X'，则说明当前单元格是左边或者上边战舰的一部分；
+
+否则，令计数器+1
+
+
+注意是大写的X，不是小写的x。
+
+
+代码：
+
+class Solution {
+public:
+    int countBattleships(vvc& board) {
+        int ans = 0;
+        for (int i = 0; i < board.size(); ++i) {
+            for (int j = 0; j < board[i].size(); ++j) {
+                if (board[i][j] == 'X') {
+                    if (j > 0 && board[i][j-1] == 'X' || i > 0 && board[i-1][j] == 'X')
+                    	continue;
+                    ++ans;
+                }
+            }
+        }
+        return ans;
+    }
+};

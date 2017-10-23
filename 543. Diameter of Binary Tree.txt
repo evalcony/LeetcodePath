@@ -1,0 +1,28 @@
+543. Diameter of Binary Tree
+
+给定一个二叉树，求任意两个节点之间的最长距离。
+
+分析
+由于是任意2节点间，所以最长距离不一定经过根节点。
+维护当前最长距离。统计每个节点的深度。
+
+代码：
+class Solution {
+public:
+    int diameterOfBinaryTree(TreeNode* root) {
+        if (!root) return ans;
+
+        return max(ans, dep(root->left)+dep(root->right));
+    }
+    int dep(TreeNode *node) {
+        if (node) {
+            int lft = dep(node->left);
+            int rgt = dep(node->right);
+            ans = ans < lft+rgt ? lft+rgt : ans;
+            return max(lft, rgt)+1;
+        }
+        return 0;
+    }
+private:
+    int ans = 0;
+};

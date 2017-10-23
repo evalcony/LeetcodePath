@@ -1,0 +1,78 @@
+401. Binary Watch
+
+有一种2进制表示法的手表。对小时的表示有4位(8,4,2,1)，对分钟的表示有6位(32,16,8,4,2,1).
+现在给定一个非负整数n，表示有n个灯是亮着的。问有多少种可能的时间。返回这些表示的时间。
+注意小时的范围[0,11]，分钟的范围[0,59]。
+
+
+代码：
+
+class Solution {
+public:
+    vector<string> readBinaryWatch(int num) {
+        vector<string> v;
+        if (num < 0) return v;
+        if (num == 0) {
+            string s = "0:00";
+            v.push_back(s);
+            return v;
+        }
+        int pos[10] = {1, 2, 4, 8, 1, 2, 4, 8, 16, 32};
+        if (num > 10) num = 10;
+
+        for (int i = 1; i < pow(2, 10); ++i) {
+            if (judge(i, num)) {
+                vector<int> t;
+                int n = i;
+                int k = 0;
+                while (n) {
+                    if (n & 1) {
+                        t.push_back(k);
+                    }
+                    n >>= 1;
+                    ++k;
+                }
+                int h = 0, m = 0;
+                for (auto j : t) {
+                    if (j < 4) h += pos[j];
+                    else m += pos[j];
+                }
+                if (m >= 60) continue;
+                if (h >= 12) continue;
+                string str_h = to_string(h);
+                string str_m = to_string(m);
+                if (str_m.size() != 2) str_m = "0" + str_m;
+                v.push_back(str_h+":"+str_m);
+            }
+        }
+        return v;
+    }
+    bool judge(int x, int target) {
+        int t = 0;
+        while (x) {
+            if (x & 1) ++t;
+            x >>= 1;
+        }
+        return t == target;
+    }
+};
+
+
+更简单的代码。因为里面有重要的一行代码
+	num == bitset<10>((h<<6)+m).count()
+	因为对bitset的不熟悉，所以最开始的代码才写那么长。
+
+class Solution {
+public:
+    vector<string> readBinaryWatch(int num) {
+        vector<string> result;
+        for(int h = 0; h < 12; ++h)
+            for(int m = 0; m < 60; ++m)
+                if(num == bitset<10>((h << 6) + m).count())
+                    result.emplace_back(
+                        to_string(h) +
+                        (m >= 10 ? ":" : ":0") +
+                        to_string(m));
+        return result;
+    }
+};

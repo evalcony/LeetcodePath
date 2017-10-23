@@ -1,0 +1,13 @@
+326. Power of Three
+
+在不用循环和回溯的条件下，判断一个数是否是3的幂。
+
+代码：
+class Solution {
+public:
+    bool isPowerOfThree(int n) {
+        int Max3PowerInt = 1162261467;
+        if (n <= 0 || n > Max3PowerInt) return false;
+        return Max3PowerInt % n == 0;
+    }
+};

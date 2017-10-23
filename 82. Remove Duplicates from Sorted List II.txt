@@ -1,0 +1,40 @@
+82. Remove Duplicates from Sorted List II
+
+移除链表中出现2次以上的元素。
+
+分析：
+
+测试用例里有一个用边界数据来构造测试用例卡代码的。
+
+代码：
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        ListNode *h2 = new ListNode(0);
+        h2->next = head;
+        int cur = 1e9+7;
+        ListNode *pre = h2;
+
+        while (head) {
+            if (head->next) {
+                if (head->val == head->next->val) {
+                    pre->next = head->next;
+                    cur = head->val;
+                } else {
+                    if (cur == head->val) {
+                        pre->next = head->next;
+                    } else {
+                        cur = head->val;
+                        pre = head;
+                    }
+                }
+            } else {
+                if (cur == head->val) {
+                    pre->next = nullptr;
+                }
+            }
+            head = head->next;
+        }
+        return h2->next;
+    }
+};

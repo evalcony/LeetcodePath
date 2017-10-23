@@ -1,0 +1,29 @@
+582. Kill Process
+
+给定两个数组，进程ID数组PID，父进程ID数组PPID。给定一个需要杀死的进程id，求需要杀掉哪些进程。
+
+分析：
+没想到可以往map里面存set。
+
+代码：
+class Solution {
+public:
+    vector<int> killProcess(vector<int>& pid, vector<int>& ppid, int kill) {
+
+        vector<int> v;
+        map<int, set<int>> chdn;
+        for (int i = 0; i < pid.size(); ++i) {
+            chdn[ppid[i]].insert(pid[i]);
+        }
+
+        queue<int> q;
+        q.push(kill);
+        while (!q.empty()) {
+            int tokill = q.front(); q.pop();
+            v.push_back(tokill);
+            for (int child : chdn[tokill])
+                q.push(child);
+        }
+        return v;
+    }
+};

@@ -1,0 +1,97 @@
+491. Increasing Subsequences
+
+给定一个数组，要求返回所有的非降序列。序列不可重复。
+数组长度不超过15，数字范围介于[-100,100]
+
+分析
+一种思路是枚举子序列长度。每次枚举的结果和上一次比较去重。
+
+代码
+这个版本的速度相当慢，但是能AC
+class Solution {
+private:
+    vector<int> v, t;
+    vector<vector<int>> ans;
+public:
+
+    bool isSame(vector<int> v1, vector<int> v2) {
+        if (v1.size() != v2.size()) return false;
+        for (int i = 0; i < v1.size(); ++i)
+            if (v1[i] != v2[i]) return false;
+        return true;
+    }
+
+    void search(int index, int len, int pre) {
+
+        if (index >= v.size() || t.size() == len) {
+            if (t.size()>1 && ans.size() && !isSame(t, ans.back())) ans.push_back(t);
+            if (t.size()>1 && !ans.size()) ans.push_back(t);
+            return;
+        }
+
+        for (int i = index; i < v.size(); ++i) {
+            if (v[i] >= pre) {
+                t.push_back(v[i]);
+                search(i+1, len, v[i]);
+                t.pop_back();
+            }
+        }
+    }
+
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+        v = nums;
+        for (int j = 2; j <= v.size(); ++j) {
+            for (int i = 0; i <= v.size()-j; ++i) {
+                search(i, j, -101);
+                t.clear();
+            }
+        }
+        sort(ans.begin(), ans.end());
+        vector<vector<int>> k;
+        if (ans.size()) {
+            vector<int> x = ans[0];
+            k.push_back(x);
+            for (int i = 1; i < ans.size(); ++i)
+                if (!isSame(x, ans[i])) {k.push_back(ans[i]); x = ans[i];}
+        }
+        return k;
+    }
+
+};
+
+
+好一些的版本
+它用set来去重。如果在第k个数上出现了重复数字，则不采用。
+
+class Solution {
+  public:
+    vector<vector<int>> findSubsequences(vector<int> &nums) {
+
+        vector<int> curr;
+        vector<vector<int>> res;
+        dfs(curr, res, 0, nums);
+        return res;
+    }
+
+    void dfs(vector<int> &curr, vector<vector<int>> &res, int idx,
+             const vector<int> &nums) {
+        if (idx == (int)nums.size()) {
+            if (curr.size() >= 2)
+                res.push_back(curr);
+            return;
+        } else {
+            unordered_set<int> used;
+            for (int i = idx; i < (int)nums.size(); i++) {
+                if (curr.empty() || curr.back() <= nums[i]) {
+                    if (used.count(nums[i]) == 1)
+                        continue;
+                    curr.push_back(nums[i]);
+                    used.insert(nums[i]);
+                    dfs(curr, res, i + 1, nums);
+                    curr.pop_back();
+                }
+            }
+            dfs(curr, res, nums.size(), nums);
+        }
+    }
+};

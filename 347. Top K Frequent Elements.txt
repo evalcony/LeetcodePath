@@ -1,0 +1,45 @@
+347. Top K Frequent Elements
+
+给定一个非空整数数组，求最常出现的前k个元素。
+要求时间复杂度要优于O(nlogn)。
+
+分析：
+用map把所有数的频率存起来，放入优先队列中，这样时间复杂度是O(nlogk)。
+
+代码：
+class Solution {
+public:
+    struct cmp{
+        bool operator()(pair<int, int> a, pair<int, int> b) {
+            if (a.second == b.second )
+                return a.first > b.first;
+            return a.second < b.second;
+        }
+    };
+
+    vector<int> topKFrequent(vector<int> v, int k) {
+
+        vector<int> ans;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, cmp> pq;
+
+        map<int, int> m;
+        for (int i = 0; i < v.size(); ++i) {
+            m[v[i]]++;
+        }
+        for (auto it = m.begin(); it != m.end(); ++it) {
+            pq.push(make_pair(it->first, it->second));
+        }
+
+        while (!pq.empty() && k) {
+            pair<int, int> p = pq.top();
+            ans.push_back(p.first);
+            pq.pop();
+            --k;
+        }
+        return ans;
+    }
+};
+
+有一个同样思路下简洁一点的写法，不需要写比较函数。
+思路是存pair<int, int>的时候，把频率写前面，数写后面。
+这样代码会简单一些。

@@ -1,0 +1,32 @@
+216. Combination Sum III
+
+求所有的k个1位数的组合，相加=n。
+
+分析：
+
+
+代码：
+
+
+class Solution {
+private:
+	vector<vector<int>> ans;
+	vector<int> v;
+public:
+    vector<vector<int>> combinationSum3(int k, int n) {
+        dfs(k, n, 0);
+        return ans;
+    }
+    void dfs(int k, int n, int pre) {
+    	if (k == 0 && n == 0) {
+    		ans.push_back(v);
+    		return;
+    	}
+
+    	for (int i = pre+1; i < 10; ++i) {
+    		v.push_back(i);
+    		dfs(k-1, n-i, i);
+    		v.pop_back();
+    	}
+    }
+};

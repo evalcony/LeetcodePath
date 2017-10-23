@@ -1,0 +1,21 @@
+328. Odd Even Linked List
+
+给定一个链表，返回结果，其中偶数都在奇数的后面，相对顺序不变。要求空间复杂度O(1)，时间复杂度O(n)。
+链表是呈奇偶奇偶这样交替排列。
+
+代码：
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        if (!head) return head;
+        ListNode *odd = head, *evenhead = head->next, *even = evenhead;
+        while (even && even->next) {
+            odd->next = odd->next->next;
+            even->next = even->next->next;
+            odd = odd->next;
+            even = even->next;
+        }
+        odd->next = evenhead;
+        return head;
+    }
+};

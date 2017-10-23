@@ -1,0 +1,32 @@
+539. Minimum Time Difference
+
+给定一个list，里面是24小时表示法，格式是「hour:minutes」。求其中最小的时间差。
+
+分析：
+转换成数字，然后排序。注意在最后添加一个v[0]+24*60，用以处理超过24小时的情况。
+复杂度O(nlgn).
+
+代码：
+
+class Solution {
+public:
+    int findMinDifference(vector<string>& timePoints) {
+        vector<int> time;
+        for (int i = 0; i < timePoints.size(); ++i) {
+            string s = timePoints[i];
+            int th = stoi(s.substr(0, 2));
+            int tm = stoi(s.substr(3, 2));
+            time.push_back(th*60+tm);
+        }
+
+        sort(time.begin(), time.end());
+        time.push_back(time[0]+24*60);
+        int ans = 0xffffff;
+        for (int i = 0; i < time.size()-1; ++i) {
+            ans = min(ans, time[i+1]-time[i]);
+        }
+
+        return ans;
+    }
+
+};

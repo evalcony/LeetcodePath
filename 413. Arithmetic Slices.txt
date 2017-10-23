@@ -1,0 +1,41 @@
+413. Arithmetic Slices
+
+如果一个序列至少包含3个连续数且等差，则为等差序列。
+
+给定一个序列，求其中包含多少个等差序列。
+
+分析：
+思路1.
+求出序列中存在的所有差，用set存起来，复杂度是O(n^2)
+对序列进行遍历，按差搜索合法序列。
+
+思路2.
+如果序列S是等差序列，长度为N，则其中包含1+2+...+(N-2)
+复杂度O(n)。
+
+
+之所以应该采用思路2，而不是思路1，因为审题出错。
+题目要求序列必须是连续的。而我没有看到这一条件。因为忽略了这一点，所以才考虑会间隔数字做等差，才考虑要枚举差。而当有了连续条件后，自然只需要遍历一次就够了，复杂度O(n)。
+
+代码：
+class Solution {
+public:
+    int numberOfArithmeticSlices(vector<int>& A) {
+
+        if (A.size() < 3) return 0;
+
+        int ans = 0, cnt = 0;
+
+        int delta = A[1] - A[0];
+        for (int x = 2; x < A.size(); ++x) {
+            if (A[x]-A[x-1] == delta) {
+                cnt++;
+                ans += cnt;
+            } else {
+                cnt = 0;
+                delta = A[x] - A[x-1];
+            }
+        }
+        return ans;
+    }
+};

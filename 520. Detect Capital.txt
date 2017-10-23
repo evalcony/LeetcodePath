@@ -1,0 +1,18 @@
+520. Detect Capital
+
+判断string大小写是否正确。
+正确的3种情况
+1.全大写
+2.全小写
+3.多于1个字母的单词首字母大写
+
+代码：
+class Solution {
+public:
+    bool detectCapitalUse(string word) {
+        int cnt = 0;
+        for (char c : word)
+            if (isupper(c)) ++cnt;
+        return !cnt || cnt == word.size() || cnt == 1 && isupper(word[0]);
+    }
+};

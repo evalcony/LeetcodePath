@@ -1,0 +1,25 @@
+108. Convert Sorted Array to Binary Search Tree
+
+将有序数组转为二叉搜索树BST
+
+代码：
+class Solution {
+public:
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+        TreeNode *root = getNode(nums, 0, nums.size());
+        return root;
+    }
+    TreeNode* getNode(vector<int>& nums, int st, int ed) {
+        if (st >= ed) return NULL;
+        int mid = st+(ed-st)/2;
+        TreeNode* node = new TreeNode(nums[mid]);
+        node->left = getNode(nums, st, mid);
+        node->right = getNode(nums, mid+1, ed);
+        return node;
+    }
+};
+
+
+
+小结
+之前看的清华数据结构和算法课程很有用。特别是左闭右开的区间写法，解决了一直以来的一个模糊点。

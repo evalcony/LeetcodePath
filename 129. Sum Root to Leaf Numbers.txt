@@ -1,0 +1,23 @@
+129. Sum Root to Leaf Numbers
+
+给定一个字典树，每个节点是一个0-9的数，计算所有路径的和。一个路径表示从根节点到叶节点路径上数字所表示的数。如1->2->3则表示123.
+
+代码：
+class Solution {
+private:
+    int cnt = 0;
+public:
+    int sumNumbers(TreeNode* root) {
+        if (root == NULL) return 0;
+        search(root, 0);
+        return cnt;
+    }
+    void search(TreeNode *node, int n) {
+        if (node->left == NULL && node->right == NULL) {
+            cnt += n*10+node->val;
+            return;
+        }
+        if (node->left != NULL) search(node->left, n*10+node->val);
+        if (node->right != NULL) search(node->right, n*10+node->val);
+    }
+};

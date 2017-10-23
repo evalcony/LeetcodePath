@@ -1,0 +1,16 @@
+217. Contains Duplicate
+
+给定一个数组，判断是否存在出现2次以上的元素。
+
+代码：
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        map<int, int> mp;
+        for (int i : nums) {
+            if (!mp[i]) mp[i]++;
+            else return true;
+        }
+        return false;
+    }
+};

@@ -1,0 +1,20 @@
+498. Diagonal Traverse
+
+给定一个矩阵，按要求重新输出。
+
+代码：
+
+代码很精简，后两行没看明白。
+
+class Solution {
+public:
+    vector<int> findDiagonalOrder(vector<vector<int>>& matrix) {
+        int m, n, L, R;
+        vector<int> v;
+        if ((m = matrix.size()) && (n = matrix[0].size()))
+            for (int i = 0; L = max(i-m+1, 0), R=min(n-1, i), i<m+n-1; ++i)
+                if (i % 2) for (int j = R; j >= L; --j) v.push_back(matrix[i-j][j]);
+                else for (int j = L; j <= R; ++j) v.push_back(matrix[i-j][j]);
+        return v;
+    }
+};

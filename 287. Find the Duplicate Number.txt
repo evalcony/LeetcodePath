@@ -1,0 +1,27 @@
+287. Find the Duplicate Number
+
+给定一个含n+1个数的数组，取值在[1,n]。其中只有1个数至少出现2次。（也就是说有的数会不出现，例如[2,2,2,2]这种情形）。
+要求O(1)的空间复杂度，小于O(n^2)的时间复杂度。
+
+
+代码：
+// 不懂
+
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) {
+        int slow=0;
+        int fast=0;
+        while(true){
+            slow=nums[slow];
+            fast=nums[nums[fast]];
+            if(slow==fast) break;
+        }
+        int find=0;
+        while(slow!=find){
+            slow=nums[slow];
+            find=nums[find];
+        }
+        return find;
+    }
+};

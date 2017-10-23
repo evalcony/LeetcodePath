@@ -1,0 +1,26 @@
+300. Longest Increasing Subsequence
+
+给定一个数组，求它的最长上升子串长度。
+
+分析：
+dp[i] = max(dp[j])+1, dp[j] < a[i]
+
+代码：
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        if (nums.size() == 0) return 0;
+        vector<int> f(nums.size(), 1);
+        for (int i = 1; i < nums.size(); ++i) {
+            int t = 0;
+            for (int j = 0; j < i; ++j)
+                if (nums[j] < nums[i])
+                    t = max(t, f[j]);
+            f[i] = (t == 0 ? f[i] : t+1);
+        }
+        int ans = f[0];
+        for (int i = 1; i < nums.size(); ++i)
+            ans = max(ans, f[i]);
+        return ans;
+    }
+};

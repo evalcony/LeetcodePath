@@ -1,0 +1,28 @@
+﻿52. N-Queens II
+
+求N皇后不同摆法的总数。
+
+分析：
+class Solution {
+private:
+    int ans = 0;
+    int v[15];
+public:
+    int totalNQueens(int n) {
+        dfs(0, n);
+        return ans;
+    }
+    void dfs(int dep, int n) {
+        if (dep == n) {ans++; return;}
+        for (int i = 0; i < n; ++i) {
+            v[dep] = i;
+            bool has = false;
+            for (int j = 0; j < dep; ++j)
+                if (abs(j-dep) == abs(v[j]-v[dep]) || v[j] == v[dep]) {
+                    has = true;
+                    break;
+                }
+            if (!has) dfs(dep+1, n);
+        }
+    }
+};

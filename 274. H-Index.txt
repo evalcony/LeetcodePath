@@ -1,0 +1,23 @@
+274. H-Index
+
+h-index表示n篇论文中至少有h篇论文引用数在h以上。
+现在给定一个n篇论文的引用数数组，求它的h-index。
+
+分析：
+把数组排序。
+
+代码：
+class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+        if (citations.size() == 0) return 0;
+        if (citations.size() == 1) return min(1, citations[0]);
+        sort(citations.rbegin(), citations.rend());
+        int i;
+        for (i = 0; i < citations.size(); ++i) {
+            if (citations[i] >= i+1) continue;
+            break;
+        }
+        return i;
+    }
+};

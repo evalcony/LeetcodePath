@@ -1,0 +1,21 @@
+535. Encode and Decode TinyURL
+
+URL的加密解密，即把URL变成短链接，和解析短链接的2个方法。
+
+分析：
+
+用longurl生成一个hash值，然后把longurl存入map[hash]中。这个hash值就是shorturl。
+
+java代码
+
+    Map<Integer, String> map = new HashMap<Integer, String>();
+    String prefix = "http://tinyurl.com/";
+    public String encode(String longUrl) {
+    	int hash = longUrl.hashCode();
+    	map.put(hash, longUrl);
+    	return prefix + hash;
+    }
+    
+    public String decode(String shortUrl) {
+    	return map.get(Integer.parseInt(shortUrl.replace(prefix, "")));
+    }

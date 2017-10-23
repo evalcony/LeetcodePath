@@ -1,0 +1,55 @@
+394. Decode String
+
+给定形如 d1[c1]d2[c2]..dk[dk1[ck1]dk2[ck2]...].dn[cn] 的字符串，其中di是整数，ci是字符串。数字表示后面的字符串重复出现的次数。如果字符串只出现1次，则省略两端括号和前面的数字。
+要求根据该字符串还原出字符串。
+
+分析
+栈
+一个int栈，一个str栈。
+注意进出栈的细节
+
+
+代码
+
+class Solution {
+public:
+    string decodeString(string s) {
+
+        stack<int> stk_num;
+        stack<string> stk_str;
+        string res;
+
+        string cur_str;
+        int cnt = 0;
+        for (int i = 0; i < s.size(); ++i) {
+            if ('0' <= s[i] && s[i] <= '9') {
+                cnt *= 10; cnt += s[i]-'0';
+            } else if (s[i] == '[') {
+                stk_num.push(cnt);
+                cnt = 0;
+                stk_str.push(cur_str);
+                cur_str = "";
+            } else if ('a' <= s[i] && s[i] <= 'z') {
+                if (!stk_num.empty()) {
+                    cur_str += s[i];
+                } else res += s[i];
+            } else if (s[i] == ']') {
+                int t = stk_num.top();
+                stk_num.pop();
+                if (stk_num.empty()) {
+                    for (int j = 0; j < t; ++j)
+                        res += cur_str;
+                    cur_str = stk_str.top();
+                    stk_str.pop();
+                } else {
+                    string tmp = "";
+                    for (int j = 0; j < t; ++j)
+                        tmp += cur_str;
+                    cur_str = stk_str.top() + tmp;
+                    stk_str.pop();
+                }
+            }
+        }
+        return res;
+    }
+};

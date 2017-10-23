@@ -1,0 +1,15 @@
+476. Number Complement
+
+给定一个正整数n，输出它的补码所表示的正整数。
+
+public:
+    int findComplement(int x) {
+        int t = 0;
+        int n = x;
+        while (n) {
+            n >>= 1;
+            ++t;
+        }
+        return int((~x) & ((1<<t)-1));
+    }
+};

@@ -1,0 +1,42 @@
+113. Path Sum II
+
+求出二叉树中所有的根到树叶节点的路径，路径和等于给定值。
+
+分析：
+注意，由于节点中可以存在负数，所以不能做剪枝的优化。
+
+代码：
+class Solution {
+private:
+    vector<int> path;
+    vector<vector<int>> ans;
+public:
+    vector<vector<int>> pathSum(TreeNode* root, int sum) {
+        if (root) {
+            path.push_back(root->val);
+            dfs(root, sum, root->val);
+        }
+        return ans;
+    }
+
+    void dfs(TreeNode *node, int target, int sum) {
+        if (node) {
+            if (node->left == nullptr && node->right == nullptr) {
+                if (target == sum)
+                    ans.push_back(path);
+                return;
+            }
+
+            if (node->left) {
+                path.push_back(node->left->val);
+                dfs(node->left, target, sum+node->left->val);
+                path.pop_back();
+            }
+            if (node->right) {
+                path.push_back(node->right->val);
+                dfs(node->right, target, sum+node->right->val);
+                path.pop_back();
+            }
+        }
+    }
+};

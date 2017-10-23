@@ -1,0 +1,25 @@
+230. Kth Smallest Element in a BST
+
+给定一个二叉搜索树BST，写方法kthSmallest求第k小的数。
+
+分析
+遍历，将结果存起来，然后排序即可。
+
+代码：
+class Solution {
+private:
+    vi v;
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        search(root);
+        sort(v.begin(), v.end());
+        return v[k-1];
+    }
+    void search(TreeNode* node) {
+        if (node != nullptr) {
+            v.push_back(node->val);
+            search(node->left);
+            search(node->right);
+        }
+    }
+};

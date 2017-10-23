@@ -1,0 +1,32 @@
+49. Group Anagrams
+
+将给定的字符串数组，按照出现的单词相同为一组进行重新分组。
+
+代码：
+class Solution {
+typedef vector<int> vi;
+typedef vector<vi> vij;
+typedef vector<string> vs;
+#define pb(a) push_back(a)
+#define mp(a,b) make_pair(a, b)
+
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        vector<vector<string>> ans;
+        if (strs.size() == 0) return ans;
+        map<string, vs> m;
+        for (auto s : strs) {
+            string ss = s;
+            sort(ss.begin(), ss.end());
+            if (m[ss].size() == 0) {
+                vs v;
+                v.pb(s);
+                m[ss] = v;
+            } else m[ss].pb(s);
+        }
+        for (auto p : m) {
+            ans.pb(p.second);
+        }
+        return ans;
+    }
+};

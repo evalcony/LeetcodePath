@@ -1,0 +1,25 @@
+409. Longest Palindrome
+
+一个包含大小写字母的字符串，求用其中的字符能构造的最长回文串长度。
+
+分析：
+统计每个字符出现的次数，偶数的全选，奇数的则取-1数量。
+最后若字符串中出现过奇数的字符，则结果+1。
+
+代码：
+class Solution {
+public:
+    int longestPalindrome(string s) {
+        map<char, int> mp;
+        for (char c : s) mp[c-'A']++;
+        int ans = 0;
+        bool flag = false;
+        for (auto it = mp.begin(); it != mp.end(); ++it) {
+            ans += (it->second % 2 == 0) ? it->second : it->second-1;
+            if (it->second % 2 != 0) flag = true;
+        }
+        if (flag)
+            ans++;
+        return ans;
+    }
+};

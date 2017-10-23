@@ -1,0 +1,34 @@
+200. Number of Islands
+
+
+代码：
+class Solution {
+private:
+    int ans = 0;
+    vector<vector<char>> m;
+    int dirx[4] = {0,1,0,-1};
+    int diry[4] = {1,0,-1,0};
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        if (!grid.size()) return 0;
+        m = grid;
+        for (int i = 0; i < m.size(); ++i)
+            for (int j = 0; j < m[i].size(); ++j)
+                if (m[i][j] == '1') {
+                    ff(i, j);
+                    ++ans;
+                }
+
+        return ans;
+    }
+    void ff(int x, int y) {
+        m[x][y] = '0';
+        for (int i = 0; i < 4; ++i) {
+            int dx = x+dirx[i];
+            int dy = y+diry[i];
+            if (0<=dx&&dx<m.size()&&0<=dy&&dy<m[dx].size()&&m[dx][dy] == '1') {
+                ff(dx, dy);
+            }
+        }
+    }
+};

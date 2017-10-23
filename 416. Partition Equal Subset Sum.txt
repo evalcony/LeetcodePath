@@ -1,0 +1,61 @@
+416. Partition Equal Subset Sum
+
+给定一个只包含正整数的非空数组，判断是否能将数组划分成2个集合，使得集合的元素和相同。
+数组大小不超过200.
+
+分析：
+排序，然后分别选取最小的和最大的，然后比较2个集合的和，再在数组中从大到小顺次补偿2个集合。直到取完。
+然后这是错误的算法。
+比如case 3,3,3,4,5
+
+A正确的2种代码，一个是0-1背包，一个是位运算。位运算的看不懂。
+
+
+代码：
+恰好装满的0-1背包
+
+class Solution {
+public:
+	bool canPartition(vector<int>& nums) {
+	    int sum = accumulate(nums.begin(), nums.end(), 0), target = sum >> 1;
+	    if (sum & 1) return false;
+	    vector<int> dp(target + 1, 0);
+	    dp[0] = 1;
+	    for(auto num : nums) 
+	        for(int i = target; i >= num; i--)
+	            dp[i] = dp[i] || dp[i - num];
+	    return dp[target];
+	}
+}
+
+自己的0-1背包版本
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        if (sum % 2 != 0) return false;
+        int target = sum >> 1;
+        vector<int> dp(target+1, -1);
+        dp[0] = 0;
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < nums.size(); ++i)
+            for (int j = target; j >= nums[i]; --j)
+                if (dp[j-nums[i]] != -1)
+                    dp[j] = max(dp[j], dp[j-nums[i]]+nums[i]);
+        return dp[target] != -1;
+    }
+};
+
+
+////////////////////
+位运算
+
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        bitset<10001> bits(1);
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        for (auto n : nums) bits |= bits << n;
+        return !(sum & 1) && bits[sum >> 1];
+    }
+};

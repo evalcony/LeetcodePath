@@ -1,0 +1,43 @@
+526. Beautiful Arrangement
+
+1到n的排列，有多少种排列，其中要么a[i]整除i，要么i整除a[i]。
+n不超过15.
+
+分析：
+即便n不超过15，全排列种数也超过了1万亿，基本肯定会超时。
+然后试图从素数入口做剪枝……
+
+后来参考别人代码，基本是dfs的思路
+
+之前没用dfs，怕超时。而且一开始估计结果比较大。
+
+代码：
+// 16ms
+
+class Solution {
+private:
+    int vis[20];
+    int count = 0;
+public:
+    int countArrangement(int N) {
+        dfs(N, N);
+        for (int i = 0; i < 20; ++i) vis[i] = 0;
+        return count;
+    }
+    void dfs(int n, int k) {
+        if (k == 0) {
+            count++;
+            return ;
+        }
+
+        for (int i = 1; i <= n; ++i) {
+            if (vis[i] || k % i != 0 && i % k != 0)
+                continue;
+            vis[i] = 1;
+            dfs(n, k-1);
+            vis[i] = 0;
+        }
+
+    }
+
+};

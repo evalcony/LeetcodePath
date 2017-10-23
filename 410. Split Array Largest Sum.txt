@@ -1,0 +1,104 @@
+410. Split Array Largest Sum
+
+给定一个数组，分割成m个连续的子数组。它有很多种分割方法，其中有一种方法，其最大的子数组和在所有的划分中，是所有最大子数组和中最小的。求这个和。
+
+分析：
+
+dp[i][j]表示区间为[0,i]的数组分割成j部分的最大元素和的最小值。
+有递推方程，
+	t[k] = max(dp[k][j-1], sum(k+1, i))
+其中，sum(k+1,i)可以方便地通过sum(i)-sum(k)计算出来，转化为O(1)的复杂度。
+于是可以写为，
+	t[k] = max(dp[k][j-1], sum(i)-sum(k))
+然后，遍历数组t，取其中最小的元素e，dp[i][j] = e
+
+坑爹的测试数据，用int会越界，得开long long。
+
+完全独立做出来一道从没见过的dp题，还是很有成就感的。
+虽然代码效率不高，146ms，只比3%的人快。
+
+代码：
+
+class Solution {
+public:
+    long long max(long long a, long long b) {
+        return a > b ? a : b;
+    }
+    long long min(long long a, long long b) {
+        return a < b ? a : b;
+    }
+    int splitArray(vector<int>& nums, int m) {
+        if (nums.size() == 0) return 0;
+        vector<long long> sum(nums.size()+1, 0);
+        sum[1] = nums[0];
+        for (int i = 1; i < nums.size(); ++i) sum[i+1] = sum[i]+nums[i];
+
+        vector<vector<long long>> dp(nums.size()+1, vector<long long>(m+1, 0));
+        for (int i = 0; i <= nums.size(); ++i) dp[i][1] = sum[i];
+
+        for (int i = 1; i <= nums.size(); ++i) {
+            for (int j = 2; j <= m; ++j) {
+                vector<long long> t;
+                long long temp = 0;
+                for (int k = 0; k < i; ++k) {
+                    temp = max(dp[k][j-1], sum[i]-sum[k]);
+                    t.push_back(temp);
+                }
+                long long r = t[0];
+                for (auto e : t)
+                    r = min(r, e);
+                dp[i][j] = r;
+            }
+        }
+        return dp[nums.size()][m];
+    }
+};
+
+
+///////////////////////////
+
+更快的代码 3ms
+用了二分。但是没看懂。
+
+class Solution {
+public:
+    typedef long long ll;
+    bool isposs(ll curr_min,vector<int>&a,int n,int m)
+    {
+        ll curr_sum=0,i,s=1;
+        for(i=0;i<n;i++)
+        {
+            if(a[i]>curr_min)
+                return false;
+            else if(curr_sum+a[i]>curr_min)
+            {
+                curr_sum=a[i];
+                s++;
+                if(s>m)
+                    return false;
+            }
+            else
+                curr_sum+=a[i];
+        }
+        return true;
+    }
+    int splitArray(vector<int>&a, int m) {
+      ll i,end=0,start=0,mid,max=INT_MAX;
+        for(i=0;i<a.size();i++)
+            end+=a[i];
+        int n=a.size();
+        while(start<=end)
+        {
+            mid=(start+end)/2;
+            if(isposs(mid,a,n,m))
+            {
+                if(mid<max)
+                    max=mid;
+                end=mid-1;
+            }
+            else
+                start=mid+1;
+        }
+        return max;
+    }
+};

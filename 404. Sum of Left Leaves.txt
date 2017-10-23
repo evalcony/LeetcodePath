@@ -1,0 +1,22 @@
+404. Sum of Left Leaves
+
+求一个二叉树的所有左叶子节点的和。
+
+代码：
+class Solution {
+public:
+    int sumOfLeftLeaves(TreeNode* root) {
+        if (root == nullptr) return 0;
+        return search(root->left, 1) + search(root->right, 0);
+    }
+    
+    int search(TreeNode* node, int dir) {
+        if (node == nullptr) return 0;
+        
+        if (node->left == nullptr && node->right == nullptr && dir) {
+            return node->val;
+        }
+        
+        return search(node->right, 0) + search(node->left, 1);
+    }
+};

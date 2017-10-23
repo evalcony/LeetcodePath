@@ -1,0 +1,31 @@
+387. First Unique Character in a String
+
+给定一个字符串，找到第一个不重复出现的字符的下标。若没有返回-1.
+
+代码：
+
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        
+        if (s.size() <= 0) return -1;
+        
+        int vis[26], pos[26];
+        for (int i = 0; i < 26; ++i) {
+            vis[i] = 0; pos[i] = -1;
+        }
+        for (int i = 0; i < s.size(); ++i) {
+            int t = s[i] - 'a';
+            vis[t]++;
+            if (pos[t] == -1) pos[t] = i;
+        }
+        int ans = s.size();
+        for (int i = 0; i < 26; ++i) {
+            if (vis[i] == 1) {
+                ans = min(ans, pos[i]);
+            }
+        }
+        if (ans == s.size()) ans = -1;
+        return ans;
+    }
+};

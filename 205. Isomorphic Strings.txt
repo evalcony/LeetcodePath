@@ -1,0 +1,18 @@
+205. Isomorphic Strings
+
+给定2个字符串s和t，判断它们是否同构。
+同构意思是拥有同样的字符串结构。
+
+代码：
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        int m1[256] = {0}, m2[256] = {0}, n = s.size();
+        for (int i = 0; i < n; ++i) {
+            if (m1[s[i]] != m2[t[i]]) return false;
+            m1[s[i]] = i + 1;
+            m2[t[i]] = i + 1;
+        }
+        return true;
+    }
+};

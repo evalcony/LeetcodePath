@@ -1,0 +1,18 @@
+504. Base 7
+
+给定一个整数，返回其7进制下的表示形式。
+
+代码：
+class Solution {
+public:
+    string convertToBase7(int num) {
+        char c[7] = {'0','1','2','3','4','5','6'};
+        int x = abs(num); string res;
+        do {
+            res = c[x % 7] + res;
+        } while (x /= 7);
+
+        return (num >= 0 ? "" : "-") + res;
+        return res;
+    }
+};

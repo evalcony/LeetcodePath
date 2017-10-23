@@ -1,0 +1,20 @@
+461. Hamming Distance
+
+计算两个数的汉明距离
+
+汉明距离即2进制表示下相同位不同的个数。
+如x=1, y=4，则2进制表示
+x = 0001
+y = 0100
+不同位有2个，分别是右起第1位和第3位。所以距离为2.
+
+
+    int hammingDistance(int x, int y) {
+        int ans = 0;
+        while (max(x, y) > 0) {
+            if (x&1 ^ y&1) ++ans;
+            x >>= 1;
+            y >>= 1;
+        }
+        return ans;
+    }

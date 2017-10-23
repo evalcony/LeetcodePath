@@ -1,0 +1,27 @@
+406. Queue Reconstruction by Height
+
+有一个包含p<h,k>的队列，k表示在该元素前有k个元素p', p'.h>=p.h。
+请重建该队列。
+
+分析：
+先选出拥有最大的h的若干元素，组成一个序列，其先后顺序安装k排列。
+然后依次选取剩余元素插入其中，其k是多少，就插在当前序列的第k位。
+
+代码：
+// c++11 代码，真是方便，以后都用c++11代码来写
+
+class Solution {
+public:
+    vector<pair<int, int> > reconstructQueue(vector<pair<int, int> >& people) {
+
+        auto comp = [](const pair<int, int>& p1, const pair<int, int>& p2)
+                    { return p1.first > p2.first || (p1.first == p2.first && p1.second < p2.second); };
+
+        sort(people.begin(), people.end(), comp);
+
+        vector<pair<int, int>> v;
+        for (auto p : people)
+            v.insert(v.begin() + p.second, p);
+        return v;
+    }
+};

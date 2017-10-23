@@ -1,0 +1,54 @@
+583. Delete Operation for Two Strings
+
+给定2个字符串，求最少的操作次数把s1变成s2。
+一次操作指删除任意一个字符串的任意一个字符。
+
+分析：
+用一个map存储word1里的字符，然后再把每一个出现在word2里的字符--。这样只要求不为0的数字和即可。当然用数组也能做。
+但是这个做法是错的。因为没有考虑到相对顺序。
+
+看来还得用dp做.
+定义dp[i][j]为到word1[i-1]和word2[j-1]为止最多的相同字符且保持相对顺序不变的字符个数。
+int dp[word1.size()+1][word2.size()+1];
+这样定义的好处是，不用为dp初始化，边界上dp[0][i]和dp[i][0]都是0.
+唯一需要注意的是比较时，要比较的是word1[i-1]和word2[j-1]。
+然后dp[word1.size()][word2.size()]就是相同个数。
+最后只要把word1.size()+word2.size()-2*same即可。
+
+递推方程
+	dp[i][j] = dp[i-1][j-1], if word1[i-1]=word2[j-1]
+	dp[i][j] = max(dp[i][j-1], dp[i-1][j]), if word1[i-1] != word2[j-1]
+
+
+这题写详细一点，因为这是自己完全独立地AC的一道DP题。没有任何提醒，没参考任何资料。然后提交出了错也是一点一点改，知道初始化是怎么回事。
+
+初始化是界定递推式的边界条件。
+
+
+代码：
+class Solution {
+public:
+    int minDistance(string word1, string word2) {
+
+        if (word1.size() == 0) return word2.size();
+        if (word2.size() == 0) return word1.size();
+
+        int dp[word1.size()+1][word2.size()+1];
+
+        for (int i = 0; i <= word1.size(); ++i)
+            for (int j = 0; j <= word2.size(); ++j)
+                dp[i][j] = 0;
+
+        for (int i = 1; i <= word1.size(); ++i) {
+        	for (int j = 1; j <= word2.size(); ++j) {
+        		if (word1[i-1] == word2[j-1])
+        			dp[i][j] = dp[i-1][j-1] + 1;
+        		else
+        			dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+        	}
+        }
+
+        int same = dp[word1.size()][word2.size()];
+        return word1.size() + word2.size() - (same << 1);
+    }
+};

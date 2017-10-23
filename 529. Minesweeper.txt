@@ -1,0 +1,61 @@
+529. Minesweeper
+
+一个扫雷游戏。
+给定一张地图，
+	E 未翻开
+	数字n 周围3*3格子内有n个雷 n=[1,8]
+	M 雷
+	B 无雷
+	X 踩雷
+
+现在给定下一个点击位置<x,y>，求点击后的局面图。
+
+
+代码：
+
+只要不在参数里传board，速度就快了不少。
+
+class Solution {
+private:
+    vector<vector<char>> m;
+public:
+    bool inboard(int x, int y) {
+        return (x >= 0 && x < m.size() && y >= 0 && y < m[0].size());
+    }
+    void reveal(int x, int y) {
+        if (!inboard(x, y)) return;
+        int dirx[8] = {-1,-1,-1,0,0,1,1,1};
+        int diry[8] {-1,0,1,-1,1,-1,0,1};
+        if (m[x][y] == 'E') {
+            int cnt = 0;
+            for (int i = 0; i < 8; ++i) {
+                int dx = x + dirx[i];
+                int dy = y + diry[i];
+                if (inboard(dx, dy) && m[dx][dy] == 'M') cnt++;
+            }
+
+            if (cnt > 0) m[x][y] = '0' + cnt;
+            else {
+                m[x][y] = 'B';
+                for (int i = 0; i < 8; ++i) {
+                    int dx = x + dirx[i];
+                    int dy = y + diry[i];
+                    reveal(dx, dy);
+                }
+            }
+        }
+    }
+    vector<vector<char>> updateBoard(vector<vector<char>>& board, vector<int>& click) {
+        int x = click[0];
+        int y = click[1];
+        m = board;
+        if (m[x][y] == 'M') {
+            m[x][y] = 'X';
+            return m;
+        }
+        reveal(x, y);
+        return m;
+
+    }
+
+};

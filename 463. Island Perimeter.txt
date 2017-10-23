@@ -1,0 +1,41 @@
+463. Island Perimeter
+
+给定一个二维数组，其中1代表陆地，0代表水域。
+格子之间上下左右可通行，对角线不能通行。
+1一定会围成一个岛，那么求岛的周长。
+
+分析：
+totol-相邻边
+
+相邻边的找法，遍历每一个格子，依次判断是否跟周围相邻。有则+1.最后全部相加，就是相邻边数量。
+
+特别直接，不需要用floodfill之类的来做。
+
+代码：
+
+class Solution {
+public:
+    int islandPerimeter(vector<vector<int> >& grid) {
+        int dx[4] = {0,-1,0,1};
+        int dy[4] = {-1,0,1,0};
+        int total = 0;
+        int side = 0;
+        int tx, ty;
+
+        for (int i = 0; i < grid.size(); ++i) {
+            for (int j = 0; j < grid[i].size(); ++j) {
+                if (grid[i][j] == 1) {
+                    ++total;
+
+                    for (int k = 0; k < 4; ++k) {
+                        tx = dx[k] + i;
+                        ty = dy[k] + j;
+                        if (tx >= 0 && tx < grid.size() && ty >= 0 && ty < grid[i].size() && grid[tx][ty] == 1)
+                            ++side;
+                    }
+                }
+            }
+        }
+        return total * 4 - side;
+    }
+};

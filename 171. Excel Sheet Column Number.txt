@@ -1,0 +1,17 @@
+171. Excel Sheet Column Number
+
+给定一个excel列名的字符串，求其十进制值。
+
+代码：
+class Solution {
+public:
+    int titleToNumber(string s) {
+        int ans = 0;
+        for (int i = 0; i < s.size(); ++i) {
+            ans *= 26;
+            int t = s[i]-'A'+1;
+            ans += t;
+        }
+        return ans;
+    }
+};

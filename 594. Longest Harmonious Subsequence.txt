@@ -1,0 +1,22 @@
+594. Longest Harmonious Subsequence
+
+一个和谐数组是指它的最大值和最小值相差1.给定一个数组，返回其和谐数组的最大长度。
+
+代码：
+class Solution {
+public:
+    int findLHS(vector<int>& nums) {
+        if (nums.size() == 0) return 0;
+        int ans = 0;
+        map<int, int> mmap;
+        set<int> ss;
+        for (int i = 0; i < nums.size(); ++i) {mmap[nums[i]]++; ss.insert(nums[i]);}
+
+        for (auto p : mmap) {
+            if (ss.count(p.first+1)) {
+                ans = max(ans, mmap[p.first]+mmap[p.first+1]);
+            }
+        }
+        return ans;
+    }
+};

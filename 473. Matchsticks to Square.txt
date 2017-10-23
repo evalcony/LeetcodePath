@@ -1,0 +1,84 @@
+473. Matchsticks to Square
+
+给定一个火柴棒的数组，值代表火柴棒长度。判断能否用所有的火柴棒拼出一个正方形，要求火柴棒不能折断，不能重复使用。
+火柴棒数量不超过15，火柴棒总长度不超过1e9。
+
+分析
+先求平均数，若不能整除，则显然false。
+再贪心选择，若不能全部取完，则false。
+
+代码
+// 速度有点慢，只比18.56%的人快。做了参数优化后能比23.75%的提交快。
+
+class Solution {
+private:
+    int len = 0;
+public:
+    bool makesquare(vector<int>& nums) {
+        if (nums.size() < 4) return false;
+
+        len = 0;
+        for (int i = 0; i < nums.size(); ++i) len += nums[i];
+        int t = len % 4;
+        if (t) return false;
+        len /= 4;
+
+        sort(nums.begin(), nums.end());
+
+        vector<int> vis(nums.size(), 0);
+        for (int i = 0; i < 4; ++i)
+            if (dfs(vis, nums, 0)) continue;
+            else return false;
+        return true;
+    }
+
+    bool dfs(vector<int> &vis, vector<int> nums, int sum) {
+        if (sum == len) return true;
+        if (sum > len) return false;
+        for (int i = nums.size()-1; i >= 0; --i) {
+            if (!vis[i] && sum+nums[i] <= len) {
+                vis[i] = 1;
+                if (dfs(vis, nums, sum+nums[i])) return true;
+                vis[i] = 0;
+            }
+        }
+        return false;
+    }
+};
+
+
+// 快的代码
+class Solution {
+public:
+    bool dfs(int step, vector<int> & edge, vector<int> & nums, int target){
+        if ( step == nums.size() )
+            return (edge[0] == edge[1] && edge[1] == edge[2] && edge[2] == edge[3]);
+        for( int i = 0 ; i < 4; ++i ){
+            if (edge[i] + nums[step] > target)
+                continue;
+            int j;
+            for(j = i -1; j >=0; --j ){
+                if (edge[i] == edge[j])
+                    break;
+            }
+            if ( j != -1 )
+                continue;
+            edge[i] += nums[step];
+            if (dfs(step+1,edge,nums,target))
+                return true;
+            edge[i] -= nums[step];
+        }
+        return false;
+    }
+    bool makesquare(vector<int>& nums) {
+        int sum = accumulate(nums.begin(), nums.end(), 0);
+        if ( sum % 4 || sum == 0 )
+            return false;
+        sort(nums.begin(),nums.end(), [](const int & a, const int & b){return a > b;});
+        for ( int n : nums )
+            if ( n > sum/4 )
+                return false;
+        vector<int> edge(4,0);
+        return dfs(0,edge,nums,sum/4);
+    }
+};

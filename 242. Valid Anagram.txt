@@ -1,0 +1,21 @@
+242. Valid Anagram
+
+给定两个字符串，判断是否是彼此的重排。
+
+代码：
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        if (s.size() != t.size()) return false;
+
+        map<char, int> map1;
+        for (int i = 0; i < s.size(); ++i) map1[s[i]-'a']++;
+        for (int i = 0; i < t.size(); ++i) map1[t[i]-'a']--;
+
+        for (auto it = map1.begin(); it != map1.end(); ++it) {
+            if (it->second != 0) return false;
+        }
+        
+        return true;
+    }
+};

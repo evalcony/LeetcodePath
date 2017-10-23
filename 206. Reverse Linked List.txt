@@ -1,0 +1,24 @@
+206. Reverse Linked List
+
+反转给定的链表
+
+分析：
+链表一直是我的弱项。几个没搞清的地方：
+1.ListNode* head分配的head是什么
+2.head自己存数据吗
+3.怎么新建节点
+4.怎么删除节点
+5.怎么插入节点
+6.几个节点之间的交换赋值
+
+代码：
+class Solution {
+public:   
+    ListNode* reverseList(ListNode* head) {
+        if (!head || !(head -> next)) return head;
+        ListNode* node = reverseList(head -> next);
+        head -> next -> next = head;
+        head -> next = NULL;
+        return node; 
+    }
+};

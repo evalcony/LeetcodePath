@@ -1,0 +1,27 @@
+447. Number of Boomerangs
+
+给了一些二维坐标，现在需要找出一个i，j，k的三元组数量，其中i-j和i-k的距离一致.
+
+
+代码：
+
+class Solution {
+public:
+    int numberOfBoomerangs(vector<pair<int, int>>& points) {
+        int cnt = 0;
+        int n = points.size();
+        for (int i = 0; i < n; ++i) {
+        	map<int, int> mp;
+        	for (int j = 0; j < n; ++j) {
+        		int x = points[i].first - points[j].first;
+        		int y = points[i].second - points[j].second;
+        		int dis = x*x + y*y;
+        		mp[dis]++;
+        	}
+        	for (auto it = mp.begin(); it != mp.end(); ++it) {
+        		cnt += it->second * (it->second-1);
+        	}
+        }
+        return cnt;
+    }
+};

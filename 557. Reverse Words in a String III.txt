@@ -1,0 +1,37 @@
+557. Reverse Words in a String III
+
+把一个string里面的每个单词反转，但相对顺序保持不变。
+
+代码：
+class Solution {
+public:
+    string reverseWords(string s) {
+        vector<string> str = split(s, ' ');
+        string ans;
+        for (int i = 0; i < str.size(); ++i) {
+            ans += reverse(str[i]);
+            ans += ' ';
+        }
+
+        return ans.substr(0, ans.length()-1);
+    }
+
+    vector<string> split(string s, char reg) {
+        vector<string> ans;
+        s += " ";
+        int pre = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            if (s[i] == reg) {
+                ans.push_back(s.substr(pre, i-pre));
+                pre = i+1;
+            }
+        }
+        return ans;
+    }
+    string reverse(string str) {
+        string s;
+        for (int i = str.length()-1; i >= 0; --i)
+            s += str[i];
+        return s;
+    }
+};

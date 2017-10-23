@@ -1,0 +1,40 @@
+241. Different Ways to Add Parentheses
+
+给定一个算数表达式，任意添加括号，求所有结果。
+
+分析
+一开始的想法是，求出运算符的个数，然后编号，然后结果就是运算符编号的全排列。
+
+事实上，这道题用递归来做。以符号为界，计算左右子串的结果，然后合并。
+
+
+代码：
+class Solution {
+public:
+    vector<int> diffWaysToCompute(string input) {
+        vector<int> res;
+        for (int i = 0; i < input.size(); ++i) {
+            char op = input[i];
+            if (op == '+' || op == '-' || op == '*') {
+                vector<int> lres = diffWaysToCompute(input.substr(0, i));
+                vector<int> rres = diffWaysToCompute(input.substr(i+1));
+
+                for (auto n1: lres) {
+                    for (auto n2 : rres) {
+                        switch(op) {
+                        case '+':res.push_back(n1+n2);break;
+                        case '-':res.push_back(n1-n2);break;
+                        case '*':res.push_back(n1*n2);break;
+                        default:break;
+                        }
+                    }
+                }
+            }
+        }
+        if (res.empty()) {
+            res.push_back(atoi(input.c_str()));
+        }
+        return res;
+    }
+
+};

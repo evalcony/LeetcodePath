@@ -1,0 +1,27 @@
+160. Intersection of Two Linked Lists
+
+找到两个链表相交的部分，返回第一个相交节点。
+
+若不相交，返回null
+保持原链表结构不变
+链表无环
+时间复杂度O(n)，空间复杂度O(1)
+
+分析：
+空间复杂度O(1)这个不知道怎么搞。
+看到一个方法，是让两个链表不断循环跑，直到节点相同。
+可是有个问题，为什么它们不会在相同的后面部分相遇？
+	哦，明白了。如果在相同的后面部分相遇，则一定在前一个节点相遇，那时依然相同，所以应该返回前一个节点。依次类推，它们一定在第一个相同节点相遇。
+
+代码：
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        ListNode *cur1 = headA, *cur2 = headB;
+        while(cur1 != cur2){
+            cur1 = cur1?cur1->next:headB;
+            cur2 = cur2?cur2->next:headA;
+        }
+        return cur1;
+    }
+};

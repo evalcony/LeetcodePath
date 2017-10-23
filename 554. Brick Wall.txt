@@ -1,0 +1,34 @@
+554. Brick Wall
+
+题目
+一个长方形里有若干砖块，砖块的高度都相同，长度不同。求一条垂线，穿过最少的砖块。若垂线落在砖块边上，不算穿过此砖块。
+每行的砖块数不超过10000，长方形高度不超过10000，砖块总数不超过20000，砖块的宽度不超过INT_MAX。
+
+分析
+首先知道，最终的垂线一定落在砖块的边上。所以穿过砖块数最少的线一定落在最多的砖块的边的下标上。
+故有算法，统计所有砖块边的下标出现的次数，然后求除头尾外出现次数最多的下标。
+
+代码
+class Solution {
+public:
+    int leastBricks(vector<vector<int>>& wall) {
+        map<int, int> mp;
+        int len = 0;
+        for (int i = 0; i < wall[0].size(); ++i) {len += wall[0][i];}
+        for (int i = 0; i < wall.size(); ++i) {
+            int a = 0;
+            for (int j = 0; j < wall[i].size(); ++j) {
+                a += wall[i][j];
+                mp[a]++;
+            }
+        }
+        int m = 0;
+        for (auto p : mp) {
+            if (p.first != len && p.first != 0) {
+                m = m < p.second ? p.second : m;
+            }
+        }
+        return wall.size()-m;
+
+    }
+};

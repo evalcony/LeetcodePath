@@ -1,0 +1,72 @@
+474. Ones and Zeroes
+
+给定一个01字符串的数组，以及m，n 2个数字。要求用总共m个0和n个1能组成在数组中最多多少个字符串。
+
+分析：
+是一道0-1背包。但是是对2种资源的0-1背包。
+计算每个字符串的花费，也就是分别消耗多少个0和1，然后每个字符串的收益都是1，也就是使得总数增加1。
+然后对2种资源进行0-1背包计算（这里直接采用空间压缩了）
+	dp[j][k] = max(dp[j-v0[i]][k-v1[i]]+1, dp[j][k])
+
+代码：
+
+class Solution {
+public:
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        if (m == 0 && n == 0 || strs.size() == 0) return 0;
+        vector<int> v0(strs.size()+1, 0);
+        vector<int> v1(strs.size()+1, 0);
+        vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
+        
+        for (int i = 0; i < strs.size(); ++i) {
+            v1[i] = count(strs[i].begin(), strs[i].end(), '1');
+            v0[i] = strs[i].size()-v1[i];
+        }
+
+        for (int i = 0; i < strs.size(); ++i)
+            for (int j = m; j >= v0[i]; --j)
+                for (int k = n; k >= v1[i]; --k)
+                    dp[j][k] = max(dp[j][k], dp[j-v0[i]][k-v1[i]]+1);
+        return dp[m][n];
+    }
+};
+
+
+//////////////////////
+更快的代码
+
+
+class Solution {
+public:
+    struct Cmp {
+        bool operator()(string& s1, string& s2) {
+            return s1.length() != s2.length() ? s1.length() < s2.length() : s1 < s2;
+        }
+    };
+    
+    int findMaxForm(vector<string>& strs, int m, int n) {
+        sort(strs.begin(), strs.end(), Cmp());
+        vector<int> numOfZero;
+        for(string s : strs) {
+            numOfZero.push_back(count(s.begin(), s.end(), '0'));
+        }
+        int maxLen = 0;
+        dfs(strs, numOfZero, m, n, 0, 0, maxLen);
+        return maxLen;
+    }
+    
+    void dfs(vector<string>& strs, vector<int>& numOfZero, int m, int n, int k, int formLen, int& maxLen) {
+        if(maxLen >= formLen + strs.size() - k) {
+            return;
+        }
+        maxLen = max(maxLen, formLen);
+        for(int i = k; i < strs.size(); i++) {
+            if(i == k || strs[i] != strs[i-1]) {
+                int zeros = numOfZero[i], ones = strs[i].length() - zeros;
+                if(m - zeros >= 0 && n - ones >= 0) {
+                    dfs(strs, numOfZero, m - zeros, n - ones, i + 1, formLen + 1, maxLen);
+                }
+            }
+        }
+    }
+};

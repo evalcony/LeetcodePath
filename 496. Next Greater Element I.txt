@@ -1,0 +1,26 @@
+496. Next Greater Element I
+
+给定两个数组（无重复）nums1 与 nums2，其中nums1的元素是nums2的子集。在nums2中寻找大于nums1中对应位置且距离最近的元素。如果对应位置不存在这样的元素，则输出-1。
+
+分析：
+使用栈，从后往前遍历nums[i]，每当栈不为空的时候，一直出栈直到遇到比nums[i]大的数字停止。设立一个map<int, int> m，存储nums中每一个元素以及它对应的下一个最大元素构成的映射。如果停止后栈为空就将m[nums[i]]标记为-1，否则就写栈的栈顶元素
+最后将findNums中出现的每一个元素对应的map的值放入result数组中返回
+
+代码：
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& findNums, vector<int>& nums) {
+        stack<int> s;
+        map<int, int> m;
+        for (int n : nums) {
+            while (s.size() && s.top() < n) {
+                m[s.top()] = n;
+                s.pop();
+            }
+            s.push(n);
+        }
+        vector<int> ans;
+        for (int n : findNums) ans.push_back(m.count(n) ? m[n] : -1);
+        return ans;
+    }
+};

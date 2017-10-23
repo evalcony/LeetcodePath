@@ -1,0 +1,39 @@
+226. Invert Binary Tree
+
+将二叉树左右镜像翻转。
+
+分析：
+一开始想到的是O(n^2logn)的算法。即用01表示是左还是右，这样每个节点就由唯一的01串表示出来，存入map中。然后遍历树，得到所有节点的表示法。然后再遍历树，镜像改变节点的值。
+但是这种写法的结果是，对于null不会处理。
+
+
+之所以想不到用递归的方法做，因为题目理解错了。对于镜像反转，没有理解到，子树只是改变了左右顺序，并不会出现其他子树的值。
+
+代码：
+
+TreeNode* inverTree(TreeNode* root) {
+	if (root) {
+		inverTree(root->left);
+		inverTree(root->right);
+		swap(root->left, root->right);
+	}
+	return root;
+}
+
+
+TreeNode* invertTree(TreeNode* root) {
+	stack<TreeNode*> stk;
+	stk.push(root);
+
+	while (!stk.isEmpty()) {
+		TreeNode* node = stk.top();
+		stk.pop();
+
+		if (node) {
+			stk.push(node->left);
+			stk.push(node->right);
+			swap(node->left, node->right);
+		}
+	}
+	return root;
+}

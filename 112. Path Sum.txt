@@ -1,0 +1,24 @@
+112. Path Sum
+
+问在一棵二叉树中是否存在一条从根到树叶的路径，使得路径上的和等于给定的数。
+
+分析：
+
+代码：
+
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int sum) {
+        return search(root, sum, 0);
+    }
+    bool search(TreeNode *node, int target, int sum) {
+        if (node == nullptr) return false;
+
+        if (node->left == nullptr && node->right == nullptr) {
+            return node->val+sum == target;
+        }
+
+        return search(node->left, target, sum+node->val) ||
+               search(node->right, target, sum+node->val);
+    }
+};

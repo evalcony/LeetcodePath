@@ -1,0 +1,24 @@
+101. Symmetric Tree
+
+给定一个二叉树，判断它是否是自己的镜像，即关于根左右对称。
+
+分析：
+镜像遍历，然后判断。
+
+代码：
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        return dfs(root, root);
+    }
+    bool dfs(TreeNode *n1, TreeNode *n2) {
+        if (n1 == nullptr && n2 == nullptr) return true;
+        if (n1 != nullptr && n2 == nullptr || n1 == nullptr && n2 != nullptr) return false;
+
+        if (n1->val == n2->val) {
+            return dfs(n1->left, n2->right) && dfs(n1->right, n2->left);
+        }
+
+        return false;
+    }
+};

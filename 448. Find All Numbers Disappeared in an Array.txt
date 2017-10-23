@@ -1,0 +1,19 @@
+448. Find All Numbers Disappeared in an Array
+
+给定一个长度为n的数组，元素值域[1,n]。其中有的元素出现2次，有的出现1次。找到那个没出现的数。
+要求复杂度O(n)，不要用额外空间。
+
+代码：
+class Solution {
+public:
+    vector<int> findDisappearedNumbers(vector<int>& nums) {
+        vector<int> v;
+        int n[nums.size()+1] = {0};
+        for (auto i : nums)
+            n[i] = 1;
+        for (int i = 1; i <= nums.size(); ++i)
+            if (!n[i])
+                v.push_back(i);
+        return v;
+    }
+};

@@ -1,0 +1,33 @@
+566. Reshape the Matrix
+
+矩阵变形输出。
+
+给定一个矩阵，以及变形后的行列值r和c，按原来矩阵的顺序输出。
+如果r*c大于原来的矩阵大小，则输出原来的矩阵。
+
+代码：
+
+class Solution {
+public:
+    vector<vector<int>> matrixReshape(vector<vector<int>>& nums, int r, int c) {
+        vector<vector<int>> v;
+        vector<int> x, tv;
+
+        int vsize = nums.size() * nums[0].size();
+        if (r * c > vsize) return nums;
+
+        for (int i = 0; i < nums.size(); ++i)
+            for (int j = 0; j < nums[i].size(); ++j)
+                x.push_back(nums[i][j]);
+        int k = 0;
+        for (int i =0; i < r; ++i) {
+            for (int j = 0; j < c; ++j) {
+                tv.push_back(x[k]);
+                ++k;
+            }
+            v.push_back(tv);
+            tv.clear();
+        }
+        return v;
+    }
+};

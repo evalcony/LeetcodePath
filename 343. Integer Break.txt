@@ -1,0 +1,40 @@
+343. Integer Break
+
+给定一个正整数n，将其变成若干数的和。求乘积最大的结果。
+例如，n=10, 返回36，因为10=3+3+4，而3*3*4=36。36是所有相加为10的元素里乘积最大的。
+
+分析：
+要使元素乘积最大，显然数应尽可能相等。
+
+当n>4时，尽可能分解成3的和，%3=0(333..3), %3=1(33..322), %3=2(33.32)
+
+代码：
+
+class Solution {
+public:
+    int integerBreak(int n) {
+        if (n > 4) {
+            int r = n % 3;
+            int k3, k2;
+            if (r == 0) {
+                k3 = n / 3;
+                k2 = 0;
+            } else if (r == 1) {
+                k3 = (n - 4) / 3;
+                k2 = 2;
+            } else {
+                k3 = (n - 2) / 3;
+                k2 = 1;
+            }
+            if (k2)
+                return pow(2, k2) * pow(3, k3);
+            else
+                return pow(3, k3);
+        } else {
+            if (n == 4) return 4;
+            if (n == 3) return 2;
+            if (n == 2) return 1;
+            if (n <= 1) return 0;
+        }
+    }
+};

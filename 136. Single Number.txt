@@ -1,0 +1,27 @@
+136. Single Number
+
+给定一个数组，除了1个元素，其他都出现了2次。找到那个只出现1次的元素。要求时间复杂度为O(n)。
+
+代码：
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        map<int, int> m;
+        for (auto i : nums) m[i]++;
+        for (auto i : nums) if (m[i] == 1) return i;
+    }
+};
+
+
+有一个很快的算法
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int x = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            x = x ^ nums[i];
+        }
+        return x;
+    }
+};

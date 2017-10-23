@@ -1,0 +1,70 @@
+318. Maximum Product of Word Lengths
+
+给定一个字符串数组，找到长度乘积最大的两个字符串，并且不含相同字符。如果没有，返回0.
+
+分析：
+遍历，如果不含公共字符，则维护一个最大乘积。判断公共字符可以用bitset来判断。
+不过这个算法效率怎么这么低啊。实际跑起来评测用了1.8m，成绩垫底。
+
+代码：
+class Solution {
+public:
+    int maxProduct(vector<string>& words) {
+        map<string, bitset<26>> mp;
+        for (int i = 0; i < words.size(); ++i) {
+            bitset<26> num = getBit(words[i]);
+            mp[words[i]] = num;
+        }
+
+        int ans = 0;
+        int a = 0;
+        for (int i = 0; i < words.size(); ++i) {
+            for (int j = 0; j < words.size(); ++j) {
+                if (i == j) continue;
+                a = (int)(mp[words[i]] & mp[words[j]]).to_ulong();
+                if (!a) {
+                    int len = words[i].size() * words[j].size();
+                    ans = max(ans, len);
+                }
+            }
+        }
+        return ans;
+    }
+    bitset<26> getBit(string str) {
+        int c[26] = {0};
+        for (int i = 0; i < str.size(); ++i) {
+            if (str[i]-'a' >= 0 && str[i]-'a' <= 26) c[str[i]-'a'] = 1;
+        }
+        string s;
+        for (int i = 0; i < 26; ++i)
+            if (c[i]) s += '1';
+            else s += '0';
+        bitset<26> bs(s);
+        return bs;
+    }
+};
+
+
+一个比较快的代码 思路是一样的。只是它没有用bitmap，而是直接位运算。
+class Solution {
+public:
+	int maxProduct(vector<string>& words) {
+		int res = 0;
+		if (words.size() < 2) return 0;
+		int n = words.size();
+		vector<int> mask(n);
+        
+        for (int i = 0; i < n; ++i) {
+			int bitmap = 0;
+			for (auto c : words[i]) bitmap |= (1<<(c-'a'));
+			mask[i] = bitmap;
+            for (int j = 0; j < i; ++j) {
+                if (!(mask[i] & mask[j])) {
+					int a = words[i].size() * words[j].size();
+					res = max(res, a);
+				}
+            }
+        }
+        return res;
+    }
+};

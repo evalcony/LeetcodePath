@@ -1,0 +1,40 @@
+116. Populating Next Right Pointers in Each Node
+
+给定一个完全二叉树（满叶子节点），要求使用O(1)辅助空间的条件下，让节点的next指针指向右边相邻的同辈节点。最右边的节点的next指向NULL。
+
+
+代码：
+我这个方法用到了节点数，所以对于超大型的树，会被局限。
+
+class Solution {
+public:
+    void connect(TreeLinkNode *root) {
+        if (root == NULL) return;
+        search(root, 1, NULL);
+    }
+    bool isPow(int n) {
+        int x = 0;
+        while (n) {
+            if ((n & 1) == 1) ++x;
+            if (x > 1) return false;
+            n >>= 1;
+        }
+        return x == 1;
+    }
+    void search(TreeLinkNode *node, int n, TreeLinkNode *pre) {
+        if (node == NULL) return;
+        if (isPow(n+1)) {
+            node->next = NULL;
+        }
+        if (pre != NULL) {
+            pre->next = node;
+        }
+        if (pre == NULL) {
+            search(node->left, n*2, NULL);
+            search(node->right, n*2+1, node->left);
+        } else {
+            search(node->left, n*2, pre->right);
+            search(node->right, n*2+1, node->left);
+        }
+    }
+};

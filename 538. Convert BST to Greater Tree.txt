@@ -1,0 +1,57 @@
+538. Convert BST to Greater Tree
+
+将BST树中每个节点的值，都变成树中不小于该值的和。
+
+日。我知道为什么别人的代码更快了，因为我忘了这是二叉查找树BST了。BST拥有性质左子树值都小于根，右子树值都大于根。故可以便遍历便改变节点值。
+
+代码：
+class Solution {
+private:
+    vector<int> v;
+public:
+    TreeNode* convertBST(TreeNode* root) {
+        if (root == NULL) return root;
+        search(root);
+        change(root);
+        return root;
+    }
+    void search(TreeNode* node) {
+        if (node == NULL) return;
+        v.push_back(node->val);
+        search(node->left);
+        search(node->right);
+    }
+    void change(TreeNode* node) {
+        if (node == NULL) return;
+        int t = 0;
+        for (int i = 0; i < v.size(); ++i) {
+            if (v[i] >= node->val) t += v[i];
+        }
+        node->val = t;
+        change(node->left);
+        change(node->right);
+    }
+};
+
+
+更快一点的代码
+class Solution {
+public:
+    TreeNode* convertBST(TreeNode* root) {
+        if (root == nullptr) return root;
+        search(root, 0);
+        return root;
+    }
+
+    int search(TreeNode* node, int greaterNum) {
+        int sum = node->val;
+        if (node->right != nullptr) sum += search(node->right, greaterNum);
+        
+        node->val = sum + greaterNum;
+        
+        if (node->left != nullptr) sum += search(node->left, node->val);
+        
+        return sum;
+    }
+
+};

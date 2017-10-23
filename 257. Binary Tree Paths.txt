@@ -1,0 +1,29 @@
+257. Binary Tree Paths
+
+给定一个二叉树，以字符串数组形式返回所有到叶子节点的路径。
+
+分析：
+dfs
+注意数字不只有1位。
+
+代码：
+class Solution {
+private:
+    vector<string> v;
+public:
+    vector<string> binaryTreePaths(TreeNode* root) {
+        if (root == nullptr) return v;
+        dfs(root, "");
+        return v;
+    }
+    void dfs(TreeNode *node, string s) {
+        if (node->left == nullptr && node->right == nullptr) {
+            s += to_string(node->val);
+            v.push_back(s);
+            return;
+        }
+        s += to_string(node->val);
+        if (node->left != nullptr) dfs(node->left, s+"->");
+        if (node->right != nullptr) dfs(node->right, s+"->");
+    }
+};

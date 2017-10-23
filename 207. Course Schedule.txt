@@ -1,0 +1,58 @@
+207. Course Schedule
+
+有编号0~n-1的n门课程需要上。有些课程有先决条件，如果课程0的先决条件是课程1，则表示为[0,1]。
+给定课程总数，以及先决条件的数组，问是否能上完所有n门课程。
+
+分析：
+一道图论题。如果图中有环，则不能。
+若无环，则可以。
+实现似乎可以用并查集做。最后也是用并查集做的，1Y。
+
+
+代码：
+class Solution {
+public:
+    vector<int> father;
+    int find(int x) {
+        int t = father[x];
+        while (t != father[t] && x != father[t]) t = father[t];
+        return t;
+    }
+    void init(int n) {
+        for (int i = 0; i < n; ++i) {
+            father.push_back(i);
+        }
+    }
+    bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {
+        init(numCourses);
+        for (int i = 0; i < prerequisites.size(); ++i) {
+            pair<int, int> p = prerequisites[i];
+            father[p.first] = p.second;
+            if (p.first == find(p.second)) return false;
+        }
+        return true;
+    }
+};
+
+
+/////////////////////////////////
+
+更快的代码
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<pair<int, int>>& prerequisites) {
+        vector<int> origin(numCourses,0);
+        
+        for(int i=0;i<numCourses;++i) origin[i] = i;
+        
+        for(auto p:prerequisites){
+            int f = p.first, s = p.second;
+            origin[f] = s;
+            while(origin[s]!=s) {
+                s = origin[s];
+                if(s==f) return false;
+            }
+        }
+        return true; 
+    }
+};

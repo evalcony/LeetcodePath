@@ -1,0 +1,20 @@
+350. Intersection of Two Arrays II
+
+给定两个数组，求交集。
+要求重复次数也相同。
+
+代码：
+class Solution {
+public:
+    vector<int> intersect(vector<int>& n1, vector<int>& n2) {
+        map<int, int> mp;
+        vector<int> v;
+        for (int num : n1) mp[num]++;
+        for (int num : n2) 
+            if (mp[num]) {
+                v.push_back(num);
+                mp[num]--;
+            }
+        return v;
+    }
+};

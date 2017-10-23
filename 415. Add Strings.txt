@@ -1,0 +1,84 @@
+415. Add Strings
+
+大整数加法。
+
+代码：
+class Solution {
+public:
+    string addStrings(string num1, string num2) {
+        reverse(num1.begin(), num1.end());
+        reverse(num2.begin(), num2.end());
+
+        string ans;
+        int c = 0;
+        int t = 0;
+        for (int i = 0; i < min(num1.size(), num2.size()); ++i) {
+            t = num1[i]-'0'+num2[i]-'0'+c;
+            c = t/10;
+            t = t%10;
+            ans += '0'+t;
+        }
+        if (num1.size() > num2.size()) {
+            for (int i = num2.size(); i < num1.size(); ++i) {
+                t = num1[i]-'0'+c;
+                c = t/10;
+                t = t%10;
+                ans += '0'+t;
+            }
+        } else {
+            for (int i = num1.size(); i < num2.size(); ++i) {
+                t = num2[i]-'0'+c;
+                c = t/10;
+                t = t%10;
+                ans += '0'+t;
+            }
+        }
+        if (c) {
+            ans += '0'+c;
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
+
+//////////////////////////////
+
+更快更简洁的写法
+
+优点：
+	通过开头对长度的判断，可以使得代码规范化，只处理单一情形，简化后面的代码。
+	由于规范化后，再在string前面补0，就可以方便从后往前遍历，不需要2次反转操作，节省时间。
+
+class Solution {
+public:
+    string addStrings(string num1, string num2) {
+        if(num1.length()<num2.length())
+            return addStrings(num2,num1);
+        
+        string padding(num1.length()-num2.length(),'0');
+        num2 = padding+num2;
+        string result(num1.length(),'0');
+        int sum;
+        int carry = 0;
+        int i;
+        for(i = num1.length()-1;i>=0;i--)
+        {
+            sum = num1[i]-'0'+num2[i]-'0'+carry;
+            if(sum<10)
+            {
+                result[i]+= (char)sum;
+                carry = 0;
+            }
+            else
+            {
+                result[i]+= (char)(sum-10);
+                carry=1;
+            }
+        }
+        if(carry)
+            return "1"+result;
+        return result;
+            
+        
+    }
+};

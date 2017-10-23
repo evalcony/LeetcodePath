@@ -1,0 +1,19 @@
+392. Is Subsequence
+
+给定两个字符串s和t，求s是否是t的子串。这里子串的意思是，s中的字符以相同的相对顺序在t中出现。
+
+代码：
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+        if (s.size() > t.size()) return false;
+        int i, j;
+        for (i = 0, j = 0; i < s.size() && j < t.size();) {
+            if (s[i] == t[j]) {
+                ++i;
+            }
+            ++j;
+        }
+        return i == s.size();
+    }
+};

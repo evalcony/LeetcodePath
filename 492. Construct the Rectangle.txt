@@ -1,0 +1,22 @@
+492. Construct the Rectangle
+
+给定area，求长和宽，使得长方形面积等于area，要求长>=宽并且长和宽之间的大小差距尽可能小.
+
+
+代码：
+class Solution {
+public:
+    vector<int> constructRectangle(int area) {
+        vector<int> v;
+        int t = sqrt(area);
+        int a, b;
+        a = b = t;
+        while (a * b != area) {
+            if (a * b < area) a++;
+            else b--;
+        }
+        v.push_back(a);
+        v.push_back(b);
+        return v;
+    }
+};

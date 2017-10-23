@@ -1,0 +1,43 @@
+553. Optimal Division
+
+给定一个数组，对里面的数进行连续除法运算。要求添加括号，使得结果最大。
+数组长度不超过10.
+每个数组只有一个最优解。
+
+分析：
+一开始想的办法
+	枚举数组的中点，然后让左边部分最大，右边部分最小。然后同样的操作对这两个子数组。
+	转化为分治。
+但是写起来这个方法代码比较长，而且不好写。连样例都过不了。
+
+参考某简洁的解法，
+
+https://discuss.leetcode.com/topic/86483/easy-to-understand-simple-o-n-solution-with-explanation
+
+但是不知道为什么这样的解法是对的，括号添加的情况不应该和数的大小有关系么？
+
+代码：
+class Solution {
+public:
+    string optimalDivision(vector<int>& nums) {
+        string ret;
+        ret = toString(nums[0]);
+        if (nums.size() == 1) return ret;
+        if (nums.size() == 2) return ret + "/" +toString(nums[1]);
+        ret += "/(" + toString(nums[1]);
+        for (int i = 2; i < nums.size(); ++i)
+            ret += "/" + toString(nums[i]);
+        ret += ")";
+        return ret;
+    }
+    string toString(int x) {
+        if (x == 0) return "0";
+        string str;
+        while (x) {
+            str += x%10+'0';
+            x /= 10;
+        }
+        reverse(str.begin(), str.end());
+        return str;
+    }
+};

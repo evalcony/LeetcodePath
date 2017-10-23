@@ -1,0 +1,17 @@
+561. Array Partition I
+
+给定一个长度为2n的整数数组，将数组分成n组，求每组数的最小值之和的最大值。
+
+分析
+将数组从小到大排序，取下标为偶数的元素求和即为答案。
+(没看懂题目意思，但解法简单，AC)
+
+
+    int arrayPairSum(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int ans = 0;
+        for (int i = 0; i < nums.size(); i += 2) {
+            ans += nums[i];
+        }
+        return ans;
+    }

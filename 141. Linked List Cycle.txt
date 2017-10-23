@@ -1,0 +1,24 @@
+141. Linked List Cycle
+
+给定一个链表，判断是否有环。
+
+分析：
+快慢步长。
+要注意对节点为空的判断这种编程细节。
+
+代码：
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        if (head == nullptr) return false;
+        ListNode *n1 = head;
+        ListNode *n2 = head->next;
+        while (n1 && n2 && n1 != n2) {
+            n1 = n1->next;
+            if (n2->next != nullptr)
+                n2 = n2->next->next;
+            else return false;
+        }
+        return n1 == n2;
+    }
+};

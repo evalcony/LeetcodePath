@@ -1,0 +1,25 @@
+375. Guess Number Higher or Lower II
+
+猜数字游戏。猜一个数字，介于[1,n]，对方会提示是高了还是低了。猜错就要付出所猜的金额，猜对会得到相应的金额。
+问要保证猜对至少要付出多少。
+
+分析：
+感觉是二分。但为啥是dp？
+
+代码：
+class Solution {
+public:
+    int getMoneyAmount(int n) {
+		if (n == 1) return 0;
+		vector<vector<int>> dp(n+1, vector<int>(n+1, 0));
+		for (int jminusi = 1; jminusi < n; jminusi++)
+			for (int i = 0; i + jminusi <= n; ++i) {
+				int j = i+jminusi;
+				dp[i][j] = INT_MAX;
+				for (int k = i; k <= j; ++k){
+					dp[i][j] = min(dp[i][j], k+max(k-1 >= i ? dp[i][k-1] : 0, j >= k+1 ? dp[k+1][j] : 0));
+				}
+			}
+		return dp[1][n];
+	}	
+};

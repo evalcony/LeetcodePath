@@ -1,0 +1,23 @@
+238. Product of Array Except Self
+
+给定一个数组，求一个新数组，其中每个元素是原数组中其他位置元素的乘积。
+例如，给定[1,2,3,4], 返回[24,12,8,6]。
+
+要求不使用除法，时间复杂度为O(n)
+
+分析：
+唉，这种坑爹题有什么意思啊
+
+代码：
+class Solution { 
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> prod(n, 1);
+        for (int i = 1; i < n; i++)
+            prod[i] = prod[i - 1] * nums[i - 1];
+        for (int i = n - 1, r = 1; i >= 0; r *= nums[i--])
+            prod[i] *= r;
+        return prod; 
+    }
+};

@@ -1,0 +1,49 @@
+542. 01 Matrix
+
+给定一个01矩阵matrix，返回一个矩阵m，m[i][j]表示matrix[i][j]位置离最近的元素0的距离。
+
+Input:
+	0 0 0
+	0 1 0
+	1 1 1
+Output:
+	0 0 0
+	0 1 0
+	1 2 1
+
+分析：
+m[i][j] = 
+	0, if matrix[i][j] == 0
+	min(m[i-1][j], m[i+1][j], m[i][j-1], m[i][j+1])+1, if matrix[i][j] != 0
+但是这个方法TLE了。
+
+那就不维护节点，直接搜。似乎也不行。
+
+最后的方法是dp。然后来回2次。
+
+代码：
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>> &matrix) {
+        int h=matrix.size(), w=matrix[0].size();
+        vector<vector<int>> dp(h, vector<int>(w, INT_MAX));
+        for (int t = 0; t <= 1; ++t) {
+            for (int i = t ? h-1:0; t?i>=0:i<h; t?--i:++i) {
+                for (int j = t ? w-1:0; t?j>=0:j<w; t?--j:++j) {
+                    if (matrix[i][j] == 0) dp[i][j] = 0;
+                    else {
+                        if (i&&dp[i-1][j]!=INT_MAX&&dp[i][j]>dp[i-1][j]+1)
+                            dp[i][j] = dp[i-1][j]+1;
+                        if (j&&dp[i][j-1]!=INT_MAX&&dp[i][j]>dp[i][j-1]+1)
+                            dp[i][j]=dp[i][j-1]+1;
+                        if (i<h-1&&dp[i+1][j]!=INT_MAX&&dp[i][j]>dp[i+1][j]+1)
+                            dp[i][j]=dp[i+1][j]+1;
+                        if (j<w-1&&dp[i][j+1]!=INT_MAX&&dp[i][j]>dp[i][j+1]+1)
+                            dp[i][j]=dp[i][j+1]+1;
+                    }
+                }
+            }
+        }
+        return dp;
+    }
+};

@@ -1,0 +1,150 @@
+332. Reconstruct Itinerary
+
+你有一堆机票，是一个<起点,终点>的数组，要求复原出行程。
+以"JFK"为出发点。
+如果有多组结果，则返回字典序较小的。
+
+分析：
+由于地点可以重复到达，一个地点可以通往多个地点，多个地点可以通往某个地点，所以，在用map存的时候，需要存放进一个vector。map<string, vector<int>>表示<起点,目的地数组>。
+用了一个total变量表示是否所有点都访问到。
+然后就是标准dfs。
+
+小结：
+这是一道略复杂的搜索题，代码量放在面试来说略大。但本质上还是dfs。
+完全独立做出，挺带感的。
+
+
+代码：
+class Solution {
+private:
+    map<string, vector<string>> m;
+    map<string, vector<int>> vis;
+    int total = 0;
+    vector<string> path;
+public:
+    vector<string> findItinerary(vector<pair<string, string>> tickets) {
+
+        for (auto p : tickets) {
+            if (!m[p.first].size()) {
+                vector<string> v;
+                v.push_back(p.second);
+                m[p.first] = v;
+            } else m[p.first].push_back(p.second);
+        }
+
+        for (auto p : m) {
+            vector<string> v = p.second;
+            if (v.size() > 1) {
+                sort(v.begin(), v.end());
+                m[p.first] = v;
+            }
+            total += p.second.size();
+            vector<int> tv(p.second.size(), 0);
+            vis[p.first] = tv;
+        }
+
+        vector<string> v_next = m["JFK"];
+        path.push_back("JFK");
+        if (v_next.size() > 1) {
+            for (int i = 0; i < v_next.size(); ++i) {
+                if (!vis["JFK"][i]) {
+                    vis["JFK"][i] = 1;
+                    total--;
+                    path.push_back(m["JFK"][i]);
+                    if (search(v_next[i])) return path;
+                    path.pop_back();
+                    total++;
+                    vis["JFK"][i] = 0;
+                }
+            }
+        } else {
+            if (!vis["JFK"][0]) {
+                vis["JFK"][0] = 1;
+                total--;
+                path.push_back(m["JFK"][0]);
+                if (search(m["JFK"][0])) return path;
+                path.pop_back();
+                total++;
+                vis["JFK"][0] = 0;
+
+            }
+        }
+        return path;
+    }
+
+    bool search(string pos) {
+        if (total == 0) return true;
+
+        if (m[pos].size() != 1) {
+            for (int i = 0; i < m[pos].size(); ++i) {
+                if (!vis[pos][i]) {
+                    vis[pos][i] = 1;
+                    total--;
+                    path.push_back(m[pos][i]);
+                    if (search(m[pos][i])) return true;
+                    path.pop_back();
+                    total++;
+                    vis[pos][i] = 0;
+
+                }
+            }
+        } else {
+            if (!vis[pos][0]) {
+                vis[pos][0] = 1;
+                total--;
+                path.push_back(m[pos][0]);
+                if (search(m[pos][0])) return true;
+                path.pop_back();
+                total++;
+                vis[pos][0] = 0;
+
+            }
+        }
+        return false;
+    }
+
+};
+
+
+/////////////////////////////////////////
+
+又短又快的代码
+
+学习的点
+	用multiset<string>来存放目的地。set可以自动将元素以字典序排序。
+	它是在找到成功路径后，再回溯，把元素存入路径。然后只要做一个reverse操作就好了。
+	★★★最精妙的是helper()里面的写法。
+
+
+class Solution {
+public:
+    vector<string> findItinerary(vector<pair<string, string>> tickets) {
+        
+        unordered_map<string, multiset<string> > map;
+        vector<string> result;
+        
+        for(auto p:tickets){
+            string from = p.first, to = p.second;
+            map[from].insert(to);
+        }
+        
+        helper("JFK", result, map);
+     
+        reverse(result.begin(), result.end());
+        
+        return result;
+    }
+    
+    
+    void helper(string from, vector<string> &result, unordered_map<string, multiset<string> > &map){
+        
+        while(!map[from].empty()){
+            auto next = map[from].begin();
+            map[from].erase(next);
+            helper(*next, result, map);
+        }
+        
+        
+        result.push_back(from);
+    }
+};

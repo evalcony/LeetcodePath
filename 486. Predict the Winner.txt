@@ -1,0 +1,89 @@
+486. Predict the Winner
+
+给定一个数组，两个人玩，每个人可以在当前的数组的头部或者尾部选择一个数，作为自己的分数，然后换人，已经被选过的数字不能再用。 
+现在有两个人玩，Player1和Player2，问给了当前的数组后，Player1能不能保证胜利？
+
+分析：
+dfs吧。
+但写的代码过不了。连[2,4,55,6,8]这种数据都过不去。只能过最简单的那几个例子。
+/* ****************************************
+
+class Solution {
+public:
+    vector<int> v;
+    bool PredictTheWinner(vector<int>& nums) {
+        
+        if (nums.size() <= 2) return true;
+        
+        v = nums;
+        pair<int, bool> pa = search(1, 1, nums.size()-1, v[0], 0);
+        pair<int, bool> pb = search(1, 0, nums.size()-2, v[nums.size()-1], 0);
+
+        return (pa.second && pa.first == 0 || !pa.second && pa.first == 1
+        ||  pb.second && pb.first == 0 || !pb.second && pb.first == 1);
+    }
+
+    pair<int, bool> search(int turn, int st, int ed, int sp1, int sp2) {
+        if (st+1 == ed) {
+
+            if (turn == 0) {
+                return make_pair(0, sp1 + max(v[st], v[ed]) >= sp2);
+            } else {
+                return make_pair(1, sp1 < max(v[st], v[ed]) + sp2);
+            }
+        }
+
+        pair<int, bool> pa, pb;
+        if (turn == 0) {
+            pa = search(1, st+1, ed, sp1+v[st], sp2);
+            pb = search(1, st, ed-1, sp1+v[ed], sp2);
+        } else {
+            pa = search(0, st+1, ed, sp1, sp2+v[st]);
+            pb = search(0, st, ed-1, sp1, sp2+v[ed]);
+        }
+        if (turn == pa.first && (pa.second || pb.second)) return make_pair(turn, (pa.second || pb.second));
+        return make_pair(turn, false);
+    }
+};
+
+
+**************************************** */
+
+AC的思路是，
+贪心选择当前最优解，最优解即当前选择和下一轮选择的差的最大值。递归求解。
+最后判断是否有>=0的选择。
+
+
+代码：
+class Solution {
+public:
+    vector<int> v;
+    bool PredictTheWinner(vector<int>& nums) {
+        v = nums;
+        return helper(0, v.size()-1) >= 0;
+    }
+    int helper(int st, int ed) {
+        if (st == ed) {
+            return v[st];
+        } else {
+            return max(v[st]-helper(st+1,ed), v[ed]-helper(st, ed-1));
+        }
+    }
+};
+
+
+更快的是用DP做的。思路和上面递归的一样，就是加了记忆化变成dp。
+class Solution {
+public:
+    bool PredictTheWinner(vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<int>> dp(n, vector<int>(n)); // use to keep the score gap 
+        for (int i = 0; i < n; i++) dp[i][i] = nums[i];
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j+i < n; j++) {
+                dp[j][j+i] = max(nums[j+i]-dp[j][j+i-1], nums[j]-dp[j+1][j+i]);
+            }
+        }
+        return dp[0][n-1] >= 0; // player1 get more score points than player2
+    }
+};

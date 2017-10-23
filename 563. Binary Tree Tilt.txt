@@ -1,0 +1,23 @@
+563. Binary Tree Tilt
+
+
+代码：
+class Solution {
+public:
+    int findTilt(TreeNode* root) {
+        if (root == nullptr || (root->left == nullptr && root->right== nullptr)) return 0;
+        int left = findTilt(root->left);
+        int right = findTilt(root->right);
+        return left + right + getTilt(root);
+    }
+    int getTilt(TreeNode* node) {
+        if (node == nullptr || (node->left == nullptr && node->right== nullptr)) return 0;
+        return abs(sumOfTree(node->left) - sumOfTree(node->right));
+    }
+    int sumOfTree(TreeNode* node) {
+        if (node == nullptr) return 0;
+        if (node->left == nullptr && node->right == nullptr) return node->val;
+        return sumOfTree(node->left) + sumOfTree(node->right) + node->val;
+    }
+
+};

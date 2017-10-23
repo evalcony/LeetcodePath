@@ -1,0 +1,40 @@
+98. Validate Binary Search Tree
+
+给定一棵二叉树，验证它是否是一棵BST。即左子树的节点<根节点，右子树的节点>根节点.
+
+分析：
+刚开始想简单了，WA了2次。
+后来调整了思路，将搜索路径上的节点都传下去，然后当前节点要和每一个父节点做判断。AC。
+
+代码：
+
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        if (root == nullptr) return true;
+        vector<pair<int, int>> path;
+        path.push_back(make_pair(0, root->val));
+        if (!search(root->left, path)) return false;
+        path.pop_back();
+
+        path.push_back(make_pair(1, root->val));
+        return search(root->right, path);
+    }
+    bool search(TreeNode *node, vector<pair<int, int>> &path) {
+        if (node == nullptr) return true;
+        for (int i = 0; i < path.size(); ++i) {
+            pair<int, int> p = path[i];
+            if (p.first && node->val <= p.second) return false;
+            if (!p.first && node->val >= p.second) return false;
+        }
+        path.push_back(make_pair(0, node->val));
+        if (!search(node->left, path)) return false;
+        path.pop_back();
+
+        path.push_back(make_pair(1, node->val));
+        if (!search(node->right, path)) return false;
+        path.pop_back();
+
+        return true;
+    }
+};

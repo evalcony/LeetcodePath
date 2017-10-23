@@ -1,0 +1,17 @@
+172. Factorial Trailing Zeroes
+
+返回n!后面0的个数。
+要求时间复杂度为O(logn)
+
+代码；
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        int r = 0;
+        while (n > 0) {
+            n /= 5;
+            r += n;
+        }
+        return r;
+    }
+};

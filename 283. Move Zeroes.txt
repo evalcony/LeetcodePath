@@ -1,0 +1,17 @@
+283. Move Zeroes
+
+给定一个数组，将所有的0都移动到末尾，同时保持其他元素的相对顺序不变。
+
+代码：
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        vector<int> v1, v2;
+        for (int i = 0; i < nums.size(); ++i)
+            if (nums[i])v1.push_back(nums[i]);
+            else v2.push_back(nums[i]);
+        for (int i = 0; i < v2.size(); ++i)
+            v1.push_back(v2[i]);
+        nums = v1;
+    }
+};

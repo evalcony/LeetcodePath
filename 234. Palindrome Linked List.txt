@@ -1,0 +1,47 @@
+234. Palindrome Linked List
+
+给定一个单链表，判断它是否是回文。
+要求时间复杂度O(n)，空间复杂度O(1)
+
+分析：
+加了条件限定之后，此题难度上升，不再是easy了。
+
+方法是先用快慢指针，当快指针到末尾时，慢指针刚好到list的中点。然后将后半段链表反转，接着就可以从头结点开始顺序比较了。
+
+其中，反转链表的部分略难一些。不过想清楚了也很好写。
+就是确定前-当前-后3个元素。不断改变链表指向即可。
+
+代码：
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) return true;
+
+        ListNode *slow = head;
+        ListNode *fast = head;
+        while (fast->next != nullptr && fast->next->next != nullptr) {
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+
+        slow->next = reverseList(slow->next);
+        slow = slow->next;
+        while (slow != nullptr) {
+            if (head->val != slow->val) return false;
+            head = head->next;
+            slow = slow->next;
+        }
+        return true;
+    }
+    ListNode *reverseList(ListNode *node) {
+        ListNode *pre = nullptr;
+        ListNode *next = nullptr;
+        while (node) {
+            next = node->next;
+            node->next = pre;
+            pre = node;
+            node = next;
+        }
+        return pre;
+    }
+};

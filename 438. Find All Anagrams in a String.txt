@@ -1,0 +1,24 @@
+438. Find All Anagrams in a String
+
+求出字符串p的乱序序列出现在字符串s中的位置。
+
+分析：
+这题对复杂度要求比较高。要用滑动窗口的方法把复杂度降到O(n)才能AC。
+这是一道好题。
+
+代码：
+public:
+    vector<int> findAnagrams(string s, string p) {
+        vi res, hash(256, 0);
+        if (s.size() < p.size()) return res;
+        for (char c : p)
+            hash[c]++;
+        int left = 0, right = 0, cnt = p.size();
+        while (right < s.size()) {
+            if (hash[s[right++]]-- >= 1) cnt--;
+            if (cnt == 0) res.pb(left);
+            if (right-left == p.size() && hash[s[left++]]++ >= 0) cnt++;
+        }
+        return res;
+    }
+};

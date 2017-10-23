@@ -1,0 +1,29 @@
+541. Reverse String II
+
+给定一个字符串和整数k，要求每2k个字符就反转其中前k个字符。如果字符串长度<k，则反转整个字符串。如果长度<2k但>=k，则反转前k个。
+
+代码：
+
+class Solution {
+public:
+    string reverseStr(string s, int k) {
+        if (k <= 1) return s;
+
+        for (int st = 0; st < s.size(); st+=2*k) {
+            string t;
+            if (st + k <= s.size())
+                t = strRe(s.substr(st, k));
+            else t = strRe(s.substr(st, s.size()-k));
+            for (int i = 0; i < t.size(); ++i)
+                s[st+i] = t[i];
+        }
+
+        return s;
+
+    }
+
+    string strRe(string s) {
+        reverse(s.begin(), s.end());
+        return s;
+    }
+};

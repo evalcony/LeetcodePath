@@ -1,0 +1,30 @@
+452. Minimum Number of Arrows to Burst Balloons
+
+给了一堆区间[start,end]，然后现在射箭的意思是箭在某一个位置，只要在这个点的区间内，那么他就可以射中
+
+那么现在有一堆这样的区间，问最少用多少箭可以射中全部？
+
+分析：
+排序+贪心。
+按区间头排序，遍历所有区间，若当前区间头>上一个重叠区间的尾，则ans+1，将该区间作为新的重叠区间。否则将交集作为新的重叠区间。
+
+代码：
+class Solution {
+public:
+    int findMinArrowShots(vector<pair<int, int>>& points) {
+        if (points.size() <= 0) return 0;
+    	sort(points.begin(), points.end());
+  		pair<int, int> p = points[0];
+  		int ans = 1;
+  		for (int i = 1; i < points.size(); ++i) {
+  			if (p.second >= points[i].first) {
+  				p.first = points[i].first;
+  				p.second = min(p.second, points[i].second);
+  			} else {
+  				p = points[i];
+  				ans ++;
+  			}
+  		}
+  		return ans;
+    }
+};

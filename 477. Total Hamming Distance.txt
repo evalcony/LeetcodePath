@@ -1,0 +1,29 @@
+477. Total Hamming Distance
+
+给定一个数组，求数组内两两元素的汉明距离之和。
+
+分析：
+常规的做法，超时了。
+因为数组的规模会在10^4，而常规的算法是O(n^2)级别的，达到10^8，超时。
+需要有O(nlgn)级别以下的算法。
+
+一个整数写成2进制，有32位。
+可以知道，数组中第k位为1的有多少个数，0<=k<32。假设为a，则第k位不为1的有n-a个数。
+故在第k位上新增加的汉明距离总数，就是这a个数和n-a个数相遇的次数，即a*(n-a)。
+由于最多只有32位，所以遍历32位即可。复杂度是O(n*32)=O(n)
+
+代码：
+class Solution {
+public:
+    int totalHammingDistance(vector<int>& nums) {
+        int sum = 0;
+        for (int i = 0; i < 32; ++i) {
+            int t = 0;
+            for (int j = 0; j < nums.size(); ++j) {
+                if ((nums[j] >> i) & 1) ++t;
+            }
+            sum += t * (nums.size()-t);
+        }
+        return sum;
+    }
+};
