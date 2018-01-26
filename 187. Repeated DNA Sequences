@@ -1,0 +1,23 @@
+187. Repeated DNA Sequences
+
+题意
+一个dna串中，找到所有重复出现的长度为10的不同子串。
+
+分析
+长度为n的dna串，有n-10个子串。将每个串放入set中，只要检查是非重复即可。
+
+代码
+class Solution {
+public:
+    vector<string> findRepeatedDnaSequences(string s) {
+        map<string, int> mp;
+        vector<string> v;
+        if (s.length() < 10) return v;
+        for (int i = 0; i <= s.length()-10; ++i) {
+            string str = s.substr(i, 10);
+            if (mp[str] != 0 && mp[str] == 1) {v.push_back(str); mp[str]++;}
+            else mp[str]++;
+        }
+        return v;
+    }
+};

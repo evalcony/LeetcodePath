@@ -1,0 +1,25 @@
+219. Contains Duplicate II
+
+题意
+给定一个整数数组和整数k，问在长度为k的区间内，能否找到2个数相同。
+
+分析
+从前向后遍历，以<num[i], i>的形式存入map中。每遇到一个重复出现的数，则下标计算，判断是非满足条件。否则，用新值更新map。
+时间复杂度为O(n).只要一遍即可。
+
+代码
+class Solution {
+public:
+    bool containsNearbyDuplicate(vector<int>& nums, int k) {
+        map<int, int> mp;
+        for (int i = 0; i < nums.size(); ++i) {
+            if (mp[nums[i]] == 0) {
+                mp[nums[i]] = i+1;
+            } else {
+                if (k >= i+1 - mp[nums[i]]) return true;
+                mp[nums[i]] = i+1;
+            }
+        }
+        return false;
+    }
+};
